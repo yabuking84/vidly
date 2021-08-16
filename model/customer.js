@@ -37,11 +37,18 @@ const Customer = mongoose.model('Customers',customerSchema);
 
 
 
-export function getAllCustomers(){ return new Promise( async (resolve,reject)=>{
+export function getAllCustomers(page=0){ return new Promise( async (resolve,reject)=>{
     try {
-        const customers = await Customer.find();
+        
+        const pageNumber = (page>0)?page:1;
+        const pageSize = (page>0)?3:0;
 
-        if(customers)
+        const customers = await Customer
+        .find()
+        .skip((pageNumber-1)*pageSize)
+        .limit(pageSize);
+
+        if(customers.length)
         return resolve(customers);
         else {
             const error = new Error('Customers empty!');

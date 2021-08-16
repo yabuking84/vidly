@@ -17,9 +17,18 @@ router.get('/', async(req,res)=>{
     }
 });
 
-router.get('/:name',async(req,res)=>{
+router.get('/page/:pageNumber', async(req,res)=>{
     try {
-        let customerFound = await customer.getCustomerByName(req.params.name);
+        const customers = await customer.getAllCustomers(req.params.pageNumber);
+        res.send(customers);
+    } catch (error) {
+        errorMod.catchResultError(error,res);
+    }
+});
+
+router.post('/find',async(req,res)=>{
+    try {
+        let customerFound = await customer.getCustomerByName(req.body.name);
         
         // if rank is gold
         if(customerFound.rank == 'gold') {
