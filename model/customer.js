@@ -56,7 +56,7 @@ export function getAllCustomers(page=0){ return new Promise( async (resolve,reje
             return reject(error);
         }
     } catch (error) {
-        errorMod.catchRejectError('Error',error ,reject);
+        errorMod.catchRejectError(error ,reject);
     }       
 });}
 
@@ -67,7 +67,7 @@ export function getCustomerByName(name) { return new Promise(async(resolve,rejec
             name
         });
         if(validateError) 
-        return errorMod.catchRejectError('InvalidInput',validateError.details[0].message,reject);
+        errorMod.throwError('InvalidInput',validateError.details[0].message);
         
         const customerFound = await Customer
         .find({
@@ -82,11 +82,11 @@ export function getCustomerByName(name) { return new Promise(async(resolve,rejec
         if(customerFound.length)
         return resolve(customerFound);
         else 
-        return errorMod.catchRejectError('NotFound','Customer not found!',reject);
+        errorMod.throwError('NotFound','Customer not found!');
                 
 
     } catch (error) {
-        errorMod.catchRejectError('Error',error ,reject);
+        errorMod.catchRejectError(error ,reject);
     }   
 
 });}
@@ -108,7 +108,7 @@ export function addCustomer(name,rank) { return new Promise(async(resolve,reject
     try {
         const validateError = validator.customer({name});
         if(validateError)
-        return errorMod.catchRejectError('InvalidInput',validateError.details[0].message,reject);
+        errorMod.throwError('InvalidInput',validateError.details[0].message);
 
         if(typeof(myVariable) == "undefined" || !rank)
         rank = 'bronze';
@@ -122,18 +122,42 @@ export function addCustomer(name,rank) { return new Promise(async(resolve,reject
         resolve(retVal);
 
     } catch (error) {
-        errorMod.catchRejectError('Error',error ,reject);
+        errorMod.catchRejectError(error ,reject);
     }    
 });}
 
 
 
 
+export function updateCustomer(id,name,rank) {return new Promise(async(resolve,reject)=>{
+    try {
+        const validateError = validator.customerUpdate({
+            id,
+            name,
+            rank
+        });
+        if(validateError) 
+        errorMod.throwError('InvalidInput',validateError.details[0].message);
 
+        const set = (rank)? {
+            name, rank 
+        } : {
+            name
+        };
 
+        const customerUpdate = await Customer.findByIdAndUpdate(id,{
+            $set: set
+        });
+        if(customerUpdate) {
+            resolve(customerUpdate);
+        } else {
+            errorMod.throwError('NotFound','Update failed! Customer not found!');
+        }
 
-
-
+    } catch (error) {
+        errorMod.catchRejectError(error ,reject);
+    }
+});}
 
 
 

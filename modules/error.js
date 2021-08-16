@@ -10,29 +10,29 @@ export function catchResultError(error,res) {
         return res.status(status).send(error.message);
     } catch (err) {
         errorDebug(err);
-        errorDebug('Result catchResultError:',err);
+        errorDebug('Result catchResultError Error:',err);
         let status = 400; 
         return res.status(status).send(err);
     }        
 }
 
-export function catchError(error) {
+
+
+export function catchRejectError(error,reject){
     try {
-        errorDebug('Error:',error.message);
+        // errorDebug('Promise Error:',error.message);
+        return reject(error);
     } catch (err) {
-        errorDebug('Error catchError:',err);
-    }  
+        // errorDebug('Promise catchRejectError Error:',err);
+        return reject(err);
+    }      
 }
 
 
-export function catchRejectError(errorName,errorMessage,reject){
-    try {
-        errorDebug('Promise Error:',errorMessage);
-        let error = new Error(errorMessage);
-        error.name = errorName; 
-        return reject(error);
-    } catch (err) {
-        errorDebug('Promise catchRejectError:',err);
-        return reject(err);
-    }      
+
+
+export function throwError(errorName,errorMessage){
+    const error = new Error(errorMessage);
+    error.name = errorName; 
+    throw error;
 }

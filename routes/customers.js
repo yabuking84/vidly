@@ -64,5 +64,14 @@ router.post('/',async(req,res)=>{
     }
 });
 
+router.put('/',async(req,res)=>{
+    try {
+        const customerUpdated = await customer.updateCustomer(req.body.id,req.body.name,req.body.rank);
+        res.send(customerUpdated);  
+    } catch (error) {
+        errorMod.catchResultError(error,res);
+    }
+});
+
 
 export default router;
