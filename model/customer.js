@@ -7,49 +7,25 @@ const defaultDebug = debug('app:default');
 const dbDebug = debug('app:db');
 const errorDebug = debug('app:error');
 
-import DateSchema from './schema/date.js'; 
 
 import * as errorMod from '../modules/error.js';
 
+import { customerSchema } from '../schema/customer.js';
 
-const customerSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        minlength: 3,
-        maxlength: 50,
-        trim: true
-    },    
-    age: {
-        type: Number,
-        min: 18,
-        max: 65,
-        required: true
-    },
-    rank:  {
-        type: String,
-        default: 'bronze',
-        lowercase: true,
-        trim: true,
-        enum: ['bronze','silver','gold']
-    }
-});
+
 const Customer = mongoose.model('Customers',customerSchema);
-
-
-
 
 
 export function getAllCustomers(page=0){ return new Promise( async (resolve,reject)=>{
     try {
         
-        const pageNumber = (page>0)?page:1;
+        const pageNum = (page>0)?page:1;
         const pageSize = (page>0)?3:0;
 
         const customers = await Customer
         .find()
         .select('-_id -__v')
-        .skip((pageNumber-1)*pageSize)
+        .skip((pageNum-1)*pageSize)
         .limit(pageSize);
 
         if(customers.length)

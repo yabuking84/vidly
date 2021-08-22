@@ -8,35 +8,23 @@ import * as errorMod from '../modules/error.js';
 
 import mongoose from 'mongoose';
 
+import { genreSchema } from '../schema/genre.js';
 
-const genreSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        minlength: 3,
-        maxlength: 50
-    },
-});
 const Genre = mongoose.model('Genres',genreSchema);
 
-// const genres = [
-//     {id:1, name: "horror"},
-//     {id:2, name: "action"},
-//     {id:3, name: "romance"}
-// ];
 
 
 
 export function getAllGenres(page=0){ return new Promise(async (resolve, reject)=>{
     try {
            
-        const pageNumber = (page>0)?page:1;
+        const pageNum = (page>0)?page:1;
         const pageSize = (page>0)?3:0;
 
         const genresFound = await Genre
         .find()
-        .select('-_id -__v')
-        .skip((pageNumber-1)*pageSize)
+        .select('-__v')
+        .skip((pageNum-1)*pageSize)
         .limit(pageSize);
 
         if(genresFound.length)
@@ -69,6 +57,16 @@ export function getGenreByName(name){ return new Promise(async (resolve, reject)
         else 
         errorMod.throwError('NotFound','Genre not found!');    
 
+    } catch (error) {
+        errorMod.catchRejectError(error ,reject);
+    }
+});}
+
+
+export function countGenre(genreId){return new Promise(async(resolve,reject)=>{
+    try {
+        const qty = await Genre.countDocuments({_id:genreId});
+        resolve(qty);
     } catch (error) {
         errorMod.catchRejectError(error ,reject);
     }

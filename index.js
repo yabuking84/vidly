@@ -32,6 +32,7 @@ const errorDebug = debug('app:error');
 import genres from './routes/genres.js';
 import customers from './routes/customers.js';
 import movies from './routes/movies.js';
+import rentals from './routes/rentals.js';
 
 const app = express();
 
@@ -91,6 +92,7 @@ mongoose.connect('mongodb://localhost/vidly')
 app.use('/api/genres',genres);
 app.use('/api/customers',customers);
 app.use('/api/movies',movies);
+app.use('/api/rentals',rentals);
 
 // ssdasd
 

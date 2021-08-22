@@ -1,1 +1,0 @@
-export default {type: Date, default: Date.now};

@@ -7,44 +7,110 @@ const errorDebug = debug('app:error');
 import * as errorMod from '../modules/error.js';
 import mongoose from 'mongoose';
 
+import {countGenre as countTheGenre} from './genre.js';
+import { movieSchema } from '../schema/movie.js';
 
-const movieSchema = new mongoose.Schema({
-    name :{
-        type: String,
-        required: true,
-        minlength: 2,
-        maxlength: 255,
-        trim: true
-    },
-    genre: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Genre',
-        required: true
-    },
-    inStock: {
-        type: Number,
-        min: 0,
-        max: 999
-    }
-});
 const Movie  = mongoose.model('Movies',movieSchema);
-
-
 
 export function getAllMovies(page=0){return new Promise(async(resolve,reject)=>{
     try {
-        const pageNumber = (page>0)?page:1;
+        const pageNum = (page>0)?page:1;
         const pageSize = (page>0)?3:0;
 
         const moviesFound = await Movie
         .find()
-        .skip((pageNumber-1)*pageSize)
+        .populate('genre')
+        .skip((pageNum-1)*pageSize)
         .limit(pageSize);
 
         if(moviesFound.length)
         resolve(moviesFound);
         else
         errorMod.throwError('Empty','Movies empty!');
+    } catch (error) {
+        errorMod.catchRejectError(error ,reject);
+    }
+});}
+
+export function addMovie(name,genreId,inStock){return new Promise(async(resolve,reject)=>{
+    try {
+        const validateError = validator.movie({
+            name,
+            genreId,
+            inStock
+        });
+        if(validateError) errorMod.throwError('InvalidInput',validateError.details[0].message);
+
+        const genre = await countTheGenre(genreId);
+        if(genre<1) errorMod.throwError('NotFound','Genre not found!');
+
+
+        const movieNew = new Movie({
+            name,
+            genre:genreId,
+            inStock            
+        });
+        const retVal = movieNew.save();
+
+        resolve(retVal);
+
+    } catch (error) {
+        errorMod.catchRejectError(error ,reject);
+    }
+});}
+
+
+
+export function updateMovie(movieId,newName,newGenreId){return new Promise(async (resolve,reject)=>{
+    try {
+        const validateError = validator.movieUpdate({
+            id: movieId,
+            name: newName,
+            genreId: newGenreId,
+        });
+        if(validateError) errorMod.throwError('InvalidInput',validateError.details[0].message);
+
+        let genreData = {};
+        if(newGenreId) {
+            const genre = await countTheGenre(newGenreId);
+            if(genre<1) errorMod.throwError('NotFound','Genre not found!');
+            
+            genreData = {
+                genre: newGenreId 
+            };
+        }
+
+        const movieUpdated = await Movie.findOneAndUpdate({
+            _id: movieId,
+        },{
+            $set: {
+                name: newName,
+                ...genreData    
+            }
+        },{
+            new: true
+        });
+
+        resolve(movieUpdated);
+    } catch (error) {
+        errorMod.catchRejectError(error ,reject);
+    }
+});}
+
+
+export function deleteMovie(movieId){return new Promise(async (resolve,reject)=>{
+    try {
+        const validateError = validator.movieDelete({id: movieId});
+        if(validateError) errorMod.throwError('InvalidInput',validateError.details[0].message);
+
+        const movieDeleted = await Movie.findOneAndDelete({
+            _id: movieId
+        });
+        if(movieDeleted)
+        resolve(movieDeleted);
+        else
+        errorMod.throwError('NotFound','Delete failed! Movie not found!');
+        
     } catch (error) {
         errorMod.catchRejectError(error ,reject);
     }

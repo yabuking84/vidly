@@ -2,7 +2,7 @@ import debug from 'debug';
 const defaultDebug = debug('app:default');
 const errorDebug = debug('app:error');
 
-export function catchResultError(error,res) {
+export function catchResultError(error,result) {
     try {
         errorDebug('Result Error:',error.message);
         let status = 400;  
