@@ -31,6 +31,7 @@ const errorDebug = debug('app:error');
 
 import genres from './routes/genres.js';
 import customers from './routes/customers.js';
+import movies from './routes/movies.js';
 
 const app = express();
 
@@ -68,10 +69,28 @@ app.use(morgan('tiny', { stream: accessLogStream }));
 // app.use(logger);
 
 
+// DB connection
+import mongoose from 'mongoose';
+
+// To fix all deprecation warnings
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true);
+
+mongoose.connect('mongodb://localhost/vidly')
+.then(()=>{
+    defaultDebug('Connected to MongoDB..');
+})
+.catch((error)=>{
+    dbDebug('DB Connection Error: ', error);
+});
+
 
 // Routes
 app.use('/api/genres',genres);
 app.use('/api/customers',customers);
+app.use('/api/movies',movies);
 
 // ssdasd
 

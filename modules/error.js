@@ -5,7 +5,7 @@ const errorDebug = debug('app:error');
 export function catchResultError(error,res) {
     try {
         errorDebug('Result Error:',error.message);
-        let status = 400; 
+        let status = 400;  
         if(error.name == 'NotFound') status = 404;
         return res.status(status).send(error.message);
     } catch (err) {
@@ -20,10 +20,17 @@ export function catchResultError(error,res) {
 
 export function catchRejectError(error,reject){
     try {
-        // errorDebug('Promise Error:',error.message);
+        // check if iit from mongoose validation error
+        if(error.name === 'ValidationError' ) {
+            errorDebug('ValidationError Error:',error.message);
+            for(let field in error.errors) {
+                errorDebug('ValidationError error.errors:',error.errors[field]);
+            }
+            return reject(error);
+        }
+        else
         return reject(error);
     } catch (err) {
-        // errorDebug('Promise catchRejectError Error:',err);
         return reject(err);
     }      
 }
@@ -35,4 +42,11 @@ export function throwError(errorName,errorMessage){
     const error = new Error(errorMessage);
     error.name = errorName; 
     throw error;
+}
+
+
+export function getError(errorName,errorMessage){
+    const error = new Error(errorMessage);
+    error.name = errorName; 
+    return error;
 }

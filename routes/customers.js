@@ -3,6 +3,7 @@ const router = express.Router();
 
 import debug from 'debug';
 const defaultDebug = debug('app:default');
+const errorDebug = debug('app:error');
 
 import * as errorMod from '../modules/error.js';
 
@@ -28,27 +29,18 @@ router.get('/page/:pageNumber', async(req,res)=>{
 
 router.post('/find',async(req,res)=>{
     try {
-        let customerFound = await customer.getCustomerByName(req.body.name);
-        
+        const customerFound = await customer.getCustomerByName(req.body.name);
         // if rank is gold
         if(customerFound.rank == 'gold') {
-            try {
-                const emailSent = await customer.sendCustomerEmail(customerFound);
-                res.send({
-                    ...customerFound,
-                    emailSent: true
-                });
-                return;
-            } catch (error) {
-                res.send({
-                    ...customerFound,
-                    emailSent: false
-                });
-                return;
-            }
+            const emailSent = await customer.sendCustomerEmail(customerFound);
+            res.send({
+                ...customerFound.toObject(),
+                emailSent: (emailSent)?true:false
+            });
+        } else {
+            res.send(customerFound);            
         }
         
-        res.send(customerFound);
     } catch (error) {
         errorMod.catchResultError(error,res);
     }
@@ -57,7 +49,7 @@ router.post('/find',async(req,res)=>{
 
 router.post('/',async(req,res)=>{
     try {
-        const customerAdded = await customer.addCustomer(req.body.name,req.body.rank);
+        const customerAdded = await customer.addCustomer(req.body.name,req.body.age,req.body.rank);
         res.send(customerAdded);  
     } catch(error) {
         errorMod.catchResultError(error,res);
@@ -68,6 +60,16 @@ router.put('/',async(req,res)=>{
     try {
         const customerUpdated = await customer.updateCustomer(req.body.id,req.body.name,req.body.rank);
         res.send(customerUpdated);  
+    } catch (error) {
+        errorMod.catchResultError(error,res);
+    }
+});
+
+
+router.delete('/delete',async(req,res)=>{
+    try {
+        const customerDeleted = await customer.deleteCustomer(req.body.id);
+        res.send(customerDeleted);
     } catch (error) {
         errorMod.catchResultError(error,res);
     }
