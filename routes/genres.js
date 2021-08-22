@@ -6,29 +6,29 @@ import * as genre from '../model/genre.js';
 
 const router = express.Router();
 
-router.get('/',async (req,res)=>{
+router.get('/',async (request,result)=>{
     try {
         const data = await genre.getAllGenres();
-        res.send(data);
+        result.send(data);
     } catch (error) {
         errorMod.catchResultError(error,res);   
     }
 
 });
 
-router.get('/page/:page', async (req,res)=>{
+router.get('/page/:page', async (request,result)=>{
     try {
-        const data = await genre.getAllGenres(req.params.page);
-        res.send(data);
+        const data = await genre.getAllGenres(request.params.page);
+        result.send(data);
     } catch (error) {
         errorMod.catchResultError(error,res);
     }
 });
 
-router.post('/find',async (req,res)=>{
+router.post('/find',async (request,result)=>{
     try {
-        const genreFound = await genre.getGenreByName(req.body.name);
-        return res.send(genreFound);  
+        const genreFound = await genre.getGenreByName(request.body.name);
+        return result.send(genreFound);  
     } catch (error) {
         return errorMod.catchResultError(error,res);
     }
@@ -36,10 +36,10 @@ router.post('/find',async (req,res)=>{
 
 
 
-router.post('/', async (req,res)=>{
+router.post('/', async (request,result)=>{
     try {
-        const genreAdded = await genre.addGenre(req.body.name);
-        return res.send(genreAdded);  
+        const genreAdded = await genre.addGenre(request.body.name);
+        return result.send(genreAdded);  
     } catch (error) {
         return errorMod.catchResultError(error,res);
     }
@@ -48,10 +48,10 @@ router.post('/', async (req,res)=>{
 
 
 
-router.put('/', async (req,res)=>{
+router.put('/', async (request,result)=>{
     try {
-        const genreUpdated = await genre.updateGenre(req.body.id,req.body.name);
-        return res.send(genreUpdated);  
+        const genreUpdated = await genre.updateGenre(request.body.id,request.body.name);
+        return result.send(genreUpdated);  
     } catch (error) {
         return errorMod.catchResultError(error,res);
     }
@@ -59,11 +59,11 @@ router.put('/', async (req,res)=>{
 
 
 
-router.delete('/delete', async (req,res)=>{
+router.delete('/delete', async (request,result)=>{
     try {
 
-        const genreDeleted = await genre.deleteGenre(req.body.id);
-        return res.send(genreDeleted);  
+        const genreDeleted = await genre.deleteGenre(request.body.id);
+        return result.send(genreDeleted);  
     } catch (error) {
         return errorMod.catchResultError(error,res);
     }

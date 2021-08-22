@@ -7,12 +7,12 @@ export function catchResultError(error,res) {
         errorDebug('Result Error:',error.message);
         let status = 400;  
         if(error.name == 'NotFound') status = 404;
-        return res.status(status).send(error.message);
+        return result.status(status).send(error.message);
     } catch (err) {
         errorDebug(err);
         errorDebug('Result catchResultError Error:',err);
         let status = 400; 
-        return res.status(status).send(err);
+        return result.status(status).send(err);
     }        
 }
 

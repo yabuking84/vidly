@@ -30,14 +30,22 @@ const movieSchema = new mongoose.Schema({
 const Movie  = mongoose.model('Movies',movieSchema);
 
 
+
 export function getAllMovies(page=0){return new Promise(async(resolve,reject)=>{
     try {
         const pageNumber = (page>0)?page:1;
         const pageSize = (page>0)?3:0;
 
-        
-        
+        const moviesFound = await Movie
+        .find()
+        .skip((pageNumber-1)*pageSize)
+        .limit(pageSize);
+
+        if(moviesFound.length)
+        resolve(moviesFound);
+        else
+        errorMod.throwError('Empty','Movies empty!');
     } catch (error) {
-        
+        errorMod.catchRejectError(error ,reject);
     }
 });}

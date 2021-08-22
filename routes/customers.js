@@ -9,36 +9,36 @@ import * as errorMod from '../modules/error.js';
 
 import * as customer from "../model/customer.js";
 
-router.get('/', async(req,res)=>{
+router.get('/', async(request,result)=>{
     try {
         const customers = await customer.getAllCustomers();
-        res.send(customers);
+        result.send(customers);
     } catch (error) {
         errorMod.catchResultError(error,res);
     }
 });
 
-router.get('/page/:pageNumber', async(req,res)=>{
+router.get('/page/:pageNumber', async(request,result)=>{
     try {
-        const customers = await customer.getAllCustomers(req.params.pageNumber);
-        res.send(customers);
+        const customers = await customer.getAllCustomers(request.params.pageNumber);
+        result.send(customers);
     } catch (error) {
         errorMod.catchResultError(error,res);
     }
 });
 
-router.post('/find',async(req,res)=>{
+router.post('/find',async(request,result)=>{
     try {
-        const customerFound = await customer.getCustomerByName(req.body.name);
+        const customerFound = await customer.getCustomerByName(request.body.name);
         // if rank is gold
         if(customerFound.rank == 'gold') {
             const emailSent = await customer.sendCustomerEmail(customerFound);
-            res.send({
+            result.send({
                 ...customerFound.toObject(),
                 emailSent: (emailSent)?true:false
             });
         } else {
-            res.send(customerFound);            
+            result.send(customerFound);            
         }
         
     } catch (error) {
@@ -47,29 +47,29 @@ router.post('/find',async(req,res)=>{
 });
 
 
-router.post('/',async(req,res)=>{
+router.post('/',async(request,result)=>{
     try {
-        const customerAdded = await customer.addCustomer(req.body.name,req.body.age,req.body.rank);
-        res.send(customerAdded);  
+        const customerAdded = await customer.addCustomer(request.body.name,request.body.age,request.body.rank);
+        result.send(customerAdded);  
     } catch(error) {
         errorMod.catchResultError(error,res);
     }
 });
 
-router.put('/',async(req,res)=>{
+router.put('/',async(request,result)=>{
     try {
-        const customerUpdated = await customer.updateCustomer(req.body.id,req.body.name,req.body.rank);
-        res.send(customerUpdated);  
+        const customerUpdated = await customer.updateCustomer(request.body.id,request.body.name,request.body.rank);
+        result.send(customerUpdated);  
     } catch (error) {
         errorMod.catchResultError(error,res);
     }
 });
 
 
-router.delete('/delete',async(req,res)=>{
+router.delete('/delete',async(request,result)=>{
     try {
-        const customerDeleted = await customer.deleteCustomer(req.body.id);
-        res.send(customerDeleted);
+        const customerDeleted = await customer.deleteCustomer(request.body.id);
+        result.send(customerDeleted);
     } catch (error) {
         errorMod.catchResultError(error,res);
     }
