@@ -2,78 +2,141 @@ import Joi from 'joi';
 import JoiObjectId from 'joi-objectid';
 Joi.objectId = JoiObjectId(Joi);
 
+import err from './error.js';
+
+function validateData(schema,data) {
+    const validateError =  Joi.object(schema).validate(data).error;
+
+    if(validateError) 
+    err.throwError('InvalidInput',validateError.details[0].message);  
+    
+    return validateError;
+}
+
+function objectId(data) {
+    const schema = {
+        "id": Joi.objectId().required()
+    };    
+    return validateData(schema,data);  
+}
 
 
-
-export function genre(data){
+function genre(data){
     const schema = {
         "name": Joi.string().min(2).required()
     };    
-    return Joi.object(schema).validate(data).error;
+    return validateData(schema,data);
 }
 
-export function genreDelete(data){
+function genreDelete(data){
     const schema = {
         "id": Joi.objectId().required()
     };
-    return Joi.object(schema).validate(data).error;
+    return validateData(schema,data);
 }
 
-export function genreUpdate(data){
+function genreUpdate(data){
     const schema = {
         "id": Joi.objectId().required(),
         "name": Joi.string().min(2).required(),
     };        
-    return Joi.object(schema).validate(data).error;
+    return validateData(schema,data);
 }
 
-export function customer(data){
+function customer(data){
     const schema = {
         "name": Joi.string().min(2).required(),
         "rank": Joi.string().min(2)
     };
-    return Joi.object(schema).validate(data).error;
+    return validateData(schema,data);
 }
 
-export function customerDelete(data){
+function customerDelete(data){
     const schema = {
         "id": Joi.objectId().required()
     };    
-    return Joi.object(schema).validate(data).error;
+    return validateData(schema,data);
 }
 
-export function customerUpdate(data){
+function customerUpdate(data){
     const schema = {
         "id": Joi.objectId().required(),
         "name": Joi.string().min(2).required(),
         "rank": Joi.string().min(2)
     };    
-    return Joi.object(schema).validate(data).error;
+    return validateData(schema,data);
+
 }
 
 
-export function movie(data) {
+function movie(data) {
     const schema = {
         "name": Joi.string().min(2).required(),
         "genreId": Joi.objectId().required(),
-        "inStock": Joi.number().integer().min(0).max(999)
+        "inStock": Joi.number().integer().min(0).max(999),
+        "dailyRentalRate": Joi.number().positive().required()
     };    
-    return Joi.object(schema).validate(data).error;
+    return validateData(schema,data);  
 }
 
 
-export function movieUpdate(data) {
+
+function movieUpdate(data) {
     const schema = {
         "id": Joi.objectId().required(),
-        "name": Joi.string().min(2).required(),
+        "name": Joi.string().min(2),
         "genreId": Joi.objectId(),
+        "dailyRentalRate": Joi.number().positive()
     };    
-    return Joi.object(schema).validate(data).error;
+    return validateData(schema,data);
 }
 
-export function movieDelete(data) {
+function movieDelete(data) {
     const schema = {
         "id": Joi.objectId().required()
     };    
-    return Joi.object(schema).validate(data).error;
+    return validateData(schema,data);
 }
+
+
+
+
+function rental(data) {
+    const schema = {
+        "customerId": Joi.objectId().required(),
+        "movieId": Joi.objectId().required()
+    };    
+
+    return validateData(schema,data);
+}
+
+
+
+function user(data) {
+    const schema = {
+        "name": Joi.string().min(2).required(),
+        "email": Joi.string().string().email({ minDomainSegments: 2}).required(),
+        "password": Joi.string().min(8).pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
+        "password_confirm": Joi.ref('password')
+    };    
+    return validateData(schema,data);
+}
+
+
+
+
+
+export default {
+    objectId,
+    genre,
+    genreDelete,
+    genreUpdate,
+    customer,
+    customerDelete,
+    customerUpdate,
+    movie,
+    movieUpdate,
+    movieDelete,
+    rental,
+    user
+};

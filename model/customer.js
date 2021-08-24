@@ -1,14 +1,7 @@
-import * as validator from '../modules/validator.js';
-
 import mongoose from 'mongoose';
-
-import debug from 'debug';
-const defaultDebug = debug('app:default');
-const dbDebug = debug('app:db');
-const errorDebug = debug('app:error');
-
-
-import * as errorMod from '../modules/error.js';
+import validator from '../modules/validator.js';
+import debug from '../modules/debug.js';
+import err from '../modules/error.js';
 
 import { customerSchema } from '../schema/customer.js';
 
@@ -16,7 +9,7 @@ import { customerSchema } from '../schema/customer.js';
 const Customer = mongoose.model('Customers',customerSchema);
 
 
-export function getAllCustomers(page=0){ return new Promise( async (resolve,reject)=>{
+function getAllCustomers(page=0){ return new Promise( async (resolve,reject)=>{
     try {
         
         const pageNum = (page>0)?page:1;
@@ -24,27 +17,25 @@ export function getAllCustomers(page=0){ return new Promise( async (resolve,reje
 
         const customers = await Customer
         .find()
-        .select('-_id -__v')
+        .select('-__v')
         .skip((pageNum-1)*pageSize)
         .limit(pageSize);
 
         if(customers.length)
         return resolve(customers);
         else 
-        errorMod.throwError('Empty','Customers empty!');
+        err.throwError('Empty','Customers empty!');
     } catch (error) {
-        errorMod.catchRejectError(error ,reject);
+        err.catchRejectError(error ,reject);
     }       
 });}
 
-export function getCustomerByName(name) { return new Promise(async(resolve,reject)=>{
+function getCustomerByName(name) { return new Promise(async(resolve,reject)=>{
     try {
         // validate input
-        const validateError = validator.customer({
+        validator.customer({
             name
         });
-        if(validateError) 
-        errorMod.throwError('InvalidInput',validateError.details[0].message);
         
         const customerFound = await Customer
         .findOne({
@@ -59,33 +50,45 @@ export function getCustomerByName(name) { return new Promise(async(resolve,rejec
         if(customerFound)
         return resolve(customerFound);
         else 
-        errorMod.throwError('NotFound','Customer not found!');
+        err.throwError('NotFound','Customer not found!');
 
 
     } catch (error) {
-        errorMod.catchRejectError(error ,reject);
+        err.catchRejectError(error ,reject);
     }   
 
 });}
 
 
 
-export function sendCustomerEmail(customer) { return new Promise(async (resolve,reject)=>{
+function findCustomerById(customerId) { return new Promise(async (resolve,reject)=>{
+    try {
+        validator.objectId({id:customerId});
+        const customer = await Customer.findById(customerId);
+        if(customer)
+        return resolve(customer);
+        else 
+        err.throwError('NotFound','Customer not found!');        
+    } catch (error) {
+        err.catchRejectError(error ,reject);
+    }
+});}
+
+
+function sendCustomerEmail(customer) { return new Promise(async (resolve,reject)=>{
     try {
         const emailSent = await simulateEmail(customer.name);
         resolve(emailSent);
     } catch (error) {
-        errorMod.catchRejectError(error ,reject);
+        err.catchRejectError(error ,reject);
     }        
 });}
 
 
 
-export function addCustomer(name,age,rank) { return new Promise(async(resolve,reject)=>{
+function addCustomer(name,age,rank) { return new Promise(async(resolve,reject)=>{
     try {
-        const validateError = validator.customer({name});
-        if(validateError)
-        errorMod.throwError('InvalidInput',validateError.details[0].message);
+        validator.customer({name});
 
         // Add customer here to db
         const customerNew = new Customer({
@@ -97,22 +100,20 @@ export function addCustomer(name,age,rank) { return new Promise(async(resolve,re
         resolve(retVal);
 
     } catch (error) {
-        errorMod.catchRejectError(error ,reject);
+        err.catchRejectError(error ,reject);
     }    
 });}
 
 
 
 
-export function updateCustomer(id,name,rank) {return new Promise(async(resolve,reject)=>{
+function updateCustomer(id,name,rank) {return new Promise(async(resolve,reject)=>{
     try {
-        const validateError = validator.customerUpdate({
+        validator.customerUpdate({
             id,
             name,
             rank
         });
-        if(validateError) 
-        errorMod.throwError('InvalidInput',validateError.details[0].message);
 
         const set = (rank)? {
             name, rank 
@@ -120,7 +121,7 @@ export function updateCustomer(id,name,rank) {return new Promise(async(resolve,r
             name
         };
 
-        const customerUpdate = await Customer.findOneAndDelete({
+        const customerUpdate = await Customer.findOneAndUpdate({
             _id: id
         },{
             $set: set
@@ -130,11 +131,11 @@ export function updateCustomer(id,name,rank) {return new Promise(async(resolve,r
         if(customerUpdate) {
             resolve(customerUpdate);
         } else {
-            errorMod.throwError('NotFound','Update failed! Customer not found!');
+            err.throwError('NotFound','Update failed! Customer not found!');
         }
 
     } catch (error) {
-        errorMod.catchRejectError(error ,reject);
+        err.catchRejectError(error ,reject);
     }
 });}
 
@@ -143,20 +144,18 @@ export function updateCustomer(id,name,rank) {return new Promise(async(resolve,r
 
 
 
-export function deleteCustomer(id){return new Promise(async(resolve,reject)=>{
+function deleteCustomer(id){return new Promise(async(resolve,reject)=>{
     try {
-        const validateError = validator.customerDelete({id});
-        if(validateError) 
-        errorMod.throwError('InvalidInput',validateError.details[0].message);
+        validator.customerDelete({id});
 
         const customerDeleted = await Customer.findOneAndDelete({_id:id});
         if(customerDeleted)
         resolve(customerDeleted);
         else
-        errorMod.throwError('NotFound','Delete failed! Customer not found!');
+        err.throwError('NotFound','Delete failed! Customer not found!');
 
     } catch (error) {
-        errorMod.catchRejectError(error,reject);
+        err.catchRejectError(error,reject);
     }
 });}
 
@@ -187,9 +186,9 @@ function simulateEmail(name){return new Promise((resolve,reject)=>{
             resolve(true);
     
             // throw error if needed when error is not sent
-            // errorMod.throwError('EmailFailed',`Customer: ${name}'s email not sent!`);
+            // err.throwError('EmailFailed',`Customer: ${name}'s email not sent!`);
         } catch (error) {
-            errorMod.catchRejectError(error ,reject);
+            err.catchRejectError(error ,reject);
         }
     },2000);        
 });}
@@ -206,10 +205,10 @@ function simulateEmail(name){return new Promise((resolve,reject)=>{
 
 
 
-export async function testing(name,rank) {
+async function testing(name,rank) {
     const asd = new TestAsync();
     const retVal =  await asd.savePromise();
-    defaultDebug('retVal',retVal);
+    debug.def('retVal',retVal);
     return retVal;
 }
 
@@ -225,12 +224,23 @@ class TestAsync {
 
     save(){
         setTimeout(()=>{
-            defaultDebug('save() log');
+            debug.def('save() log');
             return 'save()';
         },3000);
-        defaultDebug('mmmmmmmmmm');
+        debug.def('mmmmmmmmmm');
     }
 
 }
 
 
+export {findCustomerById};
+
+export default {
+    getAllCustomers,
+    getCustomerByName,
+    findCustomerById,
+    sendCustomerEmail,
+    addCustomer,
+    updateCustomer,
+    deleteCustomer
+};

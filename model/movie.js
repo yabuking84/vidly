@@ -1,10 +1,11 @@
-import * as validator from '../modules/validator.js';
+import validator from '../modules/validator.js';
 
-import debug from 'debug';
-const defaultDebug = debug('app:default');
-const errorDebug = debug('app:error');
+import debug from '../modules/debug.js';
 
-import * as errorMod from '../modules/error.js';
+
+import _ from "lodash";
+
+import  err from '../modules/error.js';
 import mongoose from 'mongoose';
 
 import {countGenre as countTheGenre} from './genre.js';
@@ -12,7 +13,7 @@ import { movieSchema } from '../schema/movie.js';
 
 const Movie  = mongoose.model('Movies',movieSchema);
 
-export function getAllMovies(page=0){return new Promise(async(resolve,reject)=>{
+function getAllMovies(page=0){return new Promise(async(resolve,reject)=>{
     try {
         const pageNum = (page>0)?page:1;
         const pageSize = (page>0)?3:0;
@@ -26,82 +27,102 @@ export function getAllMovies(page=0){return new Promise(async(resolve,reject)=>{
         if(moviesFound.length)
         resolve(moviesFound);
         else
-        errorMod.throwError('Empty','Movies empty!');
+        err.throwError('Empty','Movies empty!');
     } catch (error) {
-        errorMod.catchRejectError(error ,reject);
+        err.catchRejectError(error ,reject);
     }
 });}
 
-export function addMovie(name,genreId,inStock){return new Promise(async(resolve,reject)=>{
+function addMovie(name,genreId,inStock,dailyRentalRate){return new Promise(async(resolve,reject)=>{
     try {
-        const validateError = validator.movie({
+        validator.movie({
             name,
             genreId,
-            inStock
+            inStock,
+            dailyRentalRate
         });
-        if(validateError) errorMod.throwError('InvalidInput',validateError.details[0].message);
 
+        // using count instead of findOneById because i dont need to get all the data and its faster 
         const genre = await countTheGenre(genreId);
-        if(genre<1) errorMod.throwError('NotFound','Genre not found!');
+        if(genre<1) err.throwError('NotFound','Genre not found!');
 
 
         const movieNew = new Movie({
             name,
             genre:genreId,
-            inStock            
+            inStock,
+            dailyRentalRate
         });
         const retVal = movieNew.save();
 
         resolve(retVal);
 
     } catch (error) {
-        errorMod.catchRejectError(error ,reject);
+        err.catchRejectError(error ,reject);
     }
 });}
 
 
 
-export function updateMovie(movieId,newName,newGenreId){return new Promise(async (resolve,reject)=>{
+function updateMovie(movieId,newName,newGenreId,dailyRentalRate){return new Promise(async (resolve,reject)=>{
     try {
-        const validateError = validator.movieUpdate({
+        validator.movieUpdate({
             id: movieId,
             name: newName,
             genreId: newGenreId,
+            dailyRentalRate: dailyRentalRate
         });
-        if(validateError) errorMod.throwError('InvalidInput',validateError.details[0].message);
+        
+        let movieProps = {};
 
-        let genreData = {};
+        if(newName) {
+            movieProps = {
+                ...movieProps,
+                name: newName 
+            };
+        }
+
         if(newGenreId) {
             const genre = await countTheGenre(newGenreId);
-            if(genre<1) errorMod.throwError('NotFound','Genre not found!');
+            if(genre<1) err.throwError('NotFound','Genre not found!');
             
-            genreData = {
+            movieProps = {
+                ...movieProps,
                 genre: newGenreId 
             };
         }
 
-        const movieUpdated = await Movie.findOneAndUpdate({
-            _id: movieId,
-        },{
-            $set: {
-                name: newName,
-                ...genreData    
-            }
-        },{
-            new: true
-        });
+        if(dailyRentalRate) {
+            movieProps = {
+                ...movieProps,
+                dailyRentalRate: dailyRentalRate 
+            };
+        }
 
-        resolve(movieUpdated);
+        if(!_.isEmpty(movieProps)) {
+            const movieUpdated = await Movie.findOneAndUpdate({
+                _id: movieId,
+            },{
+                $set: {
+                    ...movieProps    
+                }
+            },{
+                new: true
+            })
+            .populate('genre');
+            resolve(movieUpdated);
+        } else  
+        resolve("Nothing to update!");
+
     } catch (error) {
-        errorMod.catchRejectError(error ,reject);
+        err.catchRejectError(error ,reject);
     }
 });}
 
 
-export function deleteMovie(movieId){return new Promise(async (resolve,reject)=>{
+function deleteMovie(movieId){return new Promise(async (resolve,reject)=>{
     try {
-        const validateError = validator.movieDelete({id: movieId});
-        if(validateError) errorMod.throwError('InvalidInput',validateError.details[0].message);
+        validator.movieDelete({id: movieId});
 
         const movieDeleted = await Movie.findOneAndDelete({
             _id: movieId
@@ -109,9 +130,38 @@ export function deleteMovie(movieId){return new Promise(async (resolve,reject)=>
         if(movieDeleted)
         resolve(movieDeleted);
         else
-        errorMod.throwError('NotFound','Delete failed! Movie not found!');
+        err.throwError('NotFound','Delete failed! Movie not found!');
         
     } catch (error) {
-        errorMod.catchRejectError(error ,reject);
+        err.catchRejectError(error ,reject);
     }
 });}
+
+
+
+function findMovieById(movieId){return new Promise(async(resolve,reject)=>{
+    try {
+        validator.objectId({id:movieId});
+        const movie = await Movie.findById(movieId).populate('genre','-__v');
+        if(movie) 
+        resolve(movie);
+        else
+        err.throwError('NotFound','Movie not found!');        
+    } catch (error) {
+        err.catchRejectError(error,reject);
+    }
+});}
+
+
+
+
+
+export {findMovieById};
+
+export default {
+    getAllMovies,
+    addMovie,
+    updateMovie,
+    deleteMovie,
+    findMovieById    
+};

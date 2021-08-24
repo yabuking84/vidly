@@ -20,19 +20,17 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 
 
-import logger from './middleware/logger.js';
+import testMiddleware, {var1} from './middleware/test.js';
 
 // Debugger
-import debug from 'debug';
-const startUpDebug = debug('app:startup');
-const dbDebug = debug('app:db');
-const defaultDebug = debug('app:default');
-const errorDebug = debug('app:error');
+import debug from './modules/debug.js';
+
 
 import genres from './routes/genres.js';
 import customers from './routes/customers.js';
 import movies from './routes/movies.js';
 import rentals from './routes/rentals.js';
+import users from './routes/users.js';
 
 const app = express();
 
@@ -52,9 +50,9 @@ const PORT = config.has('port')? config.get('port') : 3000;
 
 let asd = 'asdasdd';
 // Debuggers
-startUpDebug("Starting...");
-defaultDebug(config.get('mail.password'));
-errorDebug("test error");
+debug.start("Starting...");
+debug.def(config.get('mail.password'));
+debug.error("test error");
 
 
 
@@ -66,25 +64,26 @@ const __dirname = path.resolve();
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs/access.log'), { flags: 'a' })
 app.use(morgan('tiny', { stream: accessLogStream }));
 
-// tawing's custom logger middleware
-// app.use(logger);
-
+// tawing's custom test middleware
+app.use(testMiddleware);
+debug.def(var1);
 
 // DB connection
 import mongoose from 'mongoose';
 
-// To fix all deprecation warnings
-mongoose.set('useNewUrlParser', true);
-mongoose.set('useFindAndModify', false);
-mongoose.set('useCreateIndex', true);
-mongoose.set('useUnifiedTopology', true);
+// must configure mongodb to have replica set to make transactions work 
 
-mongoose.connect('mongodb://localhost/vidly')
+mongoose.connect('mongodb://localhost/vidly',{
+    'useNewUrlParser': true,
+    'useFindAndModify': false,
+    'useCreateIndex': true,
+    'useUnifiedTopology': true
+})
 .then(()=>{
-    defaultDebug('Connected to MongoDB..');
+    debug.def('Connected to MongoDB..');
 })
 .catch((error)=>{
-    dbDebug('DB Connection Error: ', error);
+    debug.db('DB Connection Error: ', error);
 });
 
 
@@ -93,6 +92,7 @@ app.use('/api/genres',genres);
 app.use('/api/customers',customers);
 app.use('/api/movies',movies);
 app.use('/api/rentals',rentals);
+app.use('/api/users',users);
 
 // ssdasd
 

@@ -1,10 +1,8 @@
-import * as validator from '../modules/validator.js';
+import validator from '../modules/validator.js';
 
-import debug from 'debug';
-const defaultDebug = debug('app:default');
-const errorDebug = debug('app:error');
+import debug from '../modules/debug.js';
 
-import * as errorMod from '../modules/error.js';
+import  err from '../modules/error.js';
 
 import mongoose from 'mongoose';
 
@@ -15,7 +13,7 @@ const Genre = mongoose.model('Genres',genreSchema);
 
 
 
-export function getAllGenres(page=0){ return new Promise(async (resolve, reject)=>{
+function getAllGenres(page=0){ return new Promise(async (resolve, reject)=>{
     try {
            
         const pageNum = (page>0)?page:1;
@@ -30,21 +28,19 @@ export function getAllGenres(page=0){ return new Promise(async (resolve, reject)
         if(genresFound.length)
         return resolve(genresFound);
         else 
-        errorMod.throwError('Empty','Genres empty!');        
+        err.throwError('Empty','Genres empty!');        
     } catch (error) {
-        errorMod.catchRejectError(error ,reject);
+        err.catchRejectError(error ,reject);
     }
 
 });}
 
-export function getGenreByName(name){ return new Promise(async (resolve, reject)=>{
+function getGenreByName(name){ return new Promise(async (resolve, reject)=>{
     try {
         // validate input
-        const validateError = validator.genre({
+       validator.genre({
             name
         });
-        if(validateError) 
-        errorMod.throwError('InvalidInput',validateError.details[0].message);
 
         const genreFound = await Genre
         .findOne({name})
@@ -55,32 +51,30 @@ export function getGenreByName(name){ return new Promise(async (resolve, reject)
         if(genreFound)
         return resolve(genreFound);
         else 
-        errorMod.throwError('NotFound','Genre not found!');    
+        err.throwError('NotFound','Genre not found!');    
 
     } catch (error) {
-        errorMod.catchRejectError(error ,reject);
+        err.catchRejectError(error ,reject);
     }
 });}
 
 
-export function countGenre(genreId){return new Promise(async(resolve,reject)=>{
+function countGenre(genreId){return new Promise(async(resolve,reject)=>{
     try {
         const qty = await Genre.countDocuments({_id:genreId});
         resolve(qty);
     } catch (error) {
-        errorMod.catchRejectError(error ,reject);
+        err.catchRejectError(error ,reject);
     }
 });}
 
 
-export function addGenre(name){ return new Promise(async (resolve, reject)=>{
+function addGenre(name){ return new Promise(async (resolve, reject)=>{
     try {
         // validate input
-        const validateError = validator.genre({
+        validator.genre({
             name
         });
-        if(validateError) 
-        errorMod.throwError('InvalidInput',validateError.details[0].message);
 
         const genreNew = new Genre({
             name: name
@@ -90,18 +84,16 @@ export function addGenre(name){ return new Promise(async (resolve, reject)=>{
         
         
     } catch (error) {
-        errorMod.catchRejectError(error ,reject);
+        err.catchRejectError(error ,reject);
     }
 
 });}
 
 
 
-export function updateGenre(id,name){return new Promise(async (resolve,reject)=>{
+function updateGenre(id,name){return new Promise(async (resolve,reject)=>{
     try {
-        const validateError = validator.genreUpdate({id,name});
-        if(validateError)
-        errorMod.throwError('InvalidInput',validateError.details[0].message);
+        validator.genreUpdate({id,name});
 
         const genreUpdated = await Genre.findOneAndUpdate({
             _id: id
@@ -115,19 +107,17 @@ export function updateGenre(id,name){return new Promise(async (resolve,reject)=>
         if(genreUpdated)
         resolve(genreUpdated);
         else
-        errorMod.throwError('NotFound','Update failed! Genre not found!');
+        err.throwError('NotFound','Update failed! Genre not found!');
 
     } catch (error) {
-        errorMod.catchRejectError(error ,reject);
+        err.catchRejectError(error ,reject);
     }
 });}
 
 
-export function deleteGenre(id){return new Promise(async(resolve,reject)=>{
+function deleteGenre(id){return new Promise(async(resolve,reject)=>{
     try {
-        const validateError = validator.genreDelete({id});
-        if(validateError)
-        errorMod.throwError('InvalidInput',validateError.details[0].message);
+        validator.genreDelete({id});
 
         const genreDeleted = await Genre.findOneAndDelete({
             _id: id
@@ -135,9 +125,30 @@ export function deleteGenre(id){return new Promise(async(resolve,reject)=>{
         if(genreDeleted)
         resolve(genreDeleted);
         else
-        errorMod.throwError('NotFound','Delete failed! Genre not found!');        
+        err.throwError('NotFound','Delete failed! Genre not found!');        
         
     } catch (error) {
-        errorMod.catchRejectError(error ,reject);
+        err.catchRejectError(error ,reject);
     }
 });}
+
+
+
+
+
+
+
+
+
+
+export {countGenre};
+
+
+export default {
+    getAllGenres,
+    getGenreByName,
+    countGenre,
+    addGenre,
+    updateGenre,
+    deleteGenre    
+};

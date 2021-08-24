@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import * as helper from '../modules/helper.js';
 
 import { customerMiniSchema } from './customer.js';
 import { movieMiniSchema } from './movie.js';
@@ -15,7 +16,7 @@ export const rentalSchema = new mongoose.Schema({
     dateReturned: {
         type: Date
     },
-    rentalFee: {
+    dailyRentalFee: {
         type: Number,
         min: 0,
         get: val => helper.currency(val),

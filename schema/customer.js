@@ -31,5 +31,10 @@ export const customerMiniSchema = new mongoose.Schema({
         minlength: 3,
         maxlength: 50,
         trim: true
+    },
+    details: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Customers',
+        required: true
     }
 });

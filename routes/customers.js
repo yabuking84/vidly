@@ -1,20 +1,18 @@
 import express from "express";
 const router = express.Router();
 
-import debug from 'debug';
-const defaultDebug = debug('app:default');
-const errorDebug = debug('app:error');
+import debug from '../modules/debug.js';
 
-import * as errorMod from '../modules/error.js';
+import  err from '../modules/error.js';
 
-import * as customer from "../model/customer.js";
+import customer from "../model/customer.js";
 
 router.get('/', async(request,result)=>{
     try {
         const customers = await customer.getAllCustomers();
         result.send(customers);
     } catch (error) {
-        errorMod.catchResultError(error,result);
+        err.catchResultError(error,result);
     }
 });
 
@@ -23,7 +21,7 @@ router.get('/page/:pageNum', async(request,result)=>{
         const customers = await customer.getAllCustomers(request.params.pageNum);
         result.send(customers);
     } catch (error) {
-        errorMod.catchResultError(error,result);
+        err.catchResultError(error,result);
     }
 });
 
@@ -42,7 +40,7 @@ router.post('/find',async(request,result)=>{
         }
         
     } catch (error) {
-        errorMod.catchResultError(error,result);
+        err.catchResultError(error,result);
     }
 });
 
@@ -52,7 +50,7 @@ router.post('/',async(request,result)=>{
         const customerAdded = await customer.addCustomer(request.body.name,request.body.age,request.body.rank);
         result.send(customerAdded);  
     } catch(error) {
-        errorMod.catchResultError(error,result);
+        err.catchResultError(error,result);
     }
 });
 
@@ -61,7 +59,7 @@ router.put('/',async(request,result)=>{
         const customerUpdated = await customer.updateCustomer(request.body.id,request.body.name,request.body.rank);
         result.send(customerUpdated);  
     } catch (error) {
-        errorMod.catchResultError(error,result);
+        err.catchResultError(error,result);
     }
 });
 
@@ -71,7 +69,7 @@ router.delete('/delete',async(request,result)=>{
         const customerDeleted = await customer.deleteCustomer(request.body.id);
         result.send(customerDeleted);
     } catch (error) {
-        errorMod.catchResultError(error,result);
+        err.catchResultError(error,result);
     }
 });
 

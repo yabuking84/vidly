@@ -1,16 +1,14 @@
-import debug from 'debug';
-const defaultDebug = debug('app:default');
-const errorDebug = debug('app:error');
+import debug from './debug.js';
 
-export function catchResultError(error,result) {
+function catchResultError(error,result) {
     try {
-        errorDebug('Result Error:',error.message);
+        debug.error('Result Error:',error.message);
         let status = 400;  
         if(error.name == 'NotFound') status = 404;
         return result.status(status).send(error.message);
     } catch (err) {
-        errorDebug(err);
-        errorDebug('Result catchResultError Error:',err);
+        debug.error(err);
+        debug.error('Result catchResultError Error:',err);
         let status = 400; 
         return result.status(status).send(err);
     }        
@@ -18,13 +16,14 @@ export function catchResultError(error,result) {
 
 
 
-export function catchRejectError(error,reject){
+function catchRejectError(error,reject){
     try {
+        debug.error('Reject Error:',error.message);
         // check if iit from mongoose validation error
         if(error.name === 'ValidationError' ) {
-            errorDebug('ValidationError Error:',error.message);
+            debug.error('ValidationError Error:',error.message);
             for(let field in error.errors) {
-                errorDebug('ValidationError error.errors:',error.errors[field]);
+                debug.error('ValidationError error.errors:',error.errors[field].message);
             }
             return reject(error);
         }
@@ -38,15 +37,28 @@ export function catchRejectError(error,reject){
 
 
 
-export function throwError(errorName,errorMessage){
+function throwError(errorName,errorMessage){
+    debug.error('Throw Error:',errorMessage);
     const error = new Error(errorMessage);
     error.name = errorName; 
     throw error;
 }
 
 
-export function getError(errorName,errorMessage){
+function getError(errorName,errorMessage){
+    debug.error('Get Error:',errorMessage);
     const error = new Error(errorMessage);
     error.name = errorName; 
     return error;
 }
+
+
+
+export default {
+    catchResultError,
+    catchRejectError,
+    throwError,
+    getError
+};
+
+

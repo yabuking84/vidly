@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import * as helper from '../modules/helper.js';
 
 export const movieSchema = new mongoose.Schema({
     name :{
@@ -18,7 +19,14 @@ export const movieSchema = new mongoose.Schema({
         default: 0,
         min: 0,
         max: 999
-    }
+    },
+    dailyRentalRate: {
+        type: Number,
+        min: 0,
+        get: val => helper.currency(val),
+        set: val => helper.currency(val),        
+        required: true
+    }    
 });
 
 export const movieMiniSchema = new mongoose.Schema({
@@ -28,5 +36,9 @@ export const movieMiniSchema = new mongoose.Schema({
         minlength: 2,
         maxlength: 255,
         trim: true
-    }
+    },
+    details: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Movies',
+    }    
 });

@@ -1,9 +1,9 @@
 import express from 'express';
 const router = express.Router();
 
-import * as errorMod from '../modules/error.js';
+import  err from '../modules/error.js';
 
-import * as genre from '../model/genre.js';
+import genre from '../model/genre.js';
 
 
 router.get('/',async (request,result)=>{
@@ -11,7 +11,7 @@ router.get('/',async (request,result)=>{
         const data = await genre.getAllGenres();
         result.send(data);
     } catch (error) {
-        errorMod.catchResultError(error,result);   
+        err.catchResultError(error,result);   
     }
 
 });
@@ -21,7 +21,7 @@ router.get('/page/:page', async (request,result)=>{
         const data = await genre.getAllGenres(request.params.page);
         result.send(data);
     } catch (error) {
-        errorMod.catchResultError(error,result);
+        err.catchResultError(error,result);
     }
 });
 
@@ -30,7 +30,7 @@ router.post('/find',async (request,result)=>{
         const genreFound = await genre.getGenreByName(request.body.name);
         return result.send(genreFound);  
     } catch (error) {
-        return errorMod.catchResultError(error,result);
+        return err.catchResultError(error,result);
     }
 });
 
@@ -41,7 +41,7 @@ router.post('/', async (request,result)=>{
         const genreAdded = await genre.addGenre(request.body.name);
         return result.send(genreAdded);  
     } catch (error) {
-        return errorMod.catchResultError(error,result);
+        return err.catchResultError(error,result);
     }
 });
 
@@ -53,7 +53,7 @@ router.put('/', async (request,result)=>{
         const genreUpdated = await genre.updateGenre(request.body.id,request.body.name);
         return result.send(genreUpdated);  
     } catch (error) {
-        return errorMod.catchResultError(error,result);
+        return err.catchResultError(error,result);
     }
 });
 
@@ -65,7 +65,7 @@ router.delete('/delete', async (request,result)=>{
         const genreDeleted = await genre.deleteGenre(request.body.id);
         return result.send(genreDeleted);  
     } catch (error) {
-        return errorMod.catchResultError(error,result);
+        return err.catchResultError(error,result);
     }
 });
 

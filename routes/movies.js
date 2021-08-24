@@ -1,19 +1,17 @@
 import express from "express";
 const router = express.Router();
-import * as errorMod from '../modules/error.js';
+import  err from '../modules/error.js';
 
-import * as movie from "../model/movie.js";
+import movie from "../model/movie.js";
 
-import debug from 'debug';
-const defaultDebug = debug('app:default');
-const errorDebug = debug('app:error');
+import debug from '../modules/debug.js';
 
 router.get('/', async(request,result)=>{
     try {
         const moviesFound = await movie.getAllMovies();
         result.send(moviesFound);
     } catch (error) {
-        errorMod.catchResultError(error,result);
+        err.catchResultError(error,result);
     }
 });
 
@@ -22,7 +20,7 @@ router.get('/page/:page', async (request,result)=>{
         const data = await movie.getAllMovies(request.params.page);
         result.send(data);
     } catch (error) {
-        errorMod.catchResultError(error,result);
+        err.catchResultError(error,result);
     }
 });
 
@@ -31,11 +29,12 @@ router.post('/',async(request,result)=>{
         const movieAdded = await movie.addMovie(
             request.body.name,
             request.body.genreId,
-            request.body.inStock
+            request.body.inStock,
+            request.body.dailyRentalRate
         );
         result.send(movieAdded);
     } catch (error) {
-        errorMod.catchResultError(error,result);
+        err.catchResultError(error,result);
     }
 });
 
@@ -45,11 +44,12 @@ router.put('/',async(request,result)=>{
         const movieUpdated = await movie.updateMovie(
             request.body.movieId,
             request.body.name,
-            request.body.genreId
+            request.body.genreId,
+            request.body.dailyRentalRate
         );
         result.send(movieUpdated);
     } catch (error) {
-        errorMod.catchResultError(error,result);
+        err.catchResultError(error,result);
     }
 });
 
@@ -62,7 +62,7 @@ router.delete('/',async(request,result)=>{
         );
         result.send(movieDeleted);
     } catch (error) {
-        errorMod.catchResultError(error,result);
+        err.catchResultError(error,result);
     }
 });
 
