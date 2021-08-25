@@ -21,5 +21,11 @@ export const userSchema = new mongoose.Schema({
         minlength: 3,
         maxlength: 50,
         trim: true
-    },           
+    },
+    password: {
+        type: String,
+        required: true,
+        minlength: 8,
+        maxlength: 20
+    }
 });

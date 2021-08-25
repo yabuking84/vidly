@@ -6,8 +6,8 @@ import err from '../modules/error.js';
 
 import user from '../model/user.js';
 
-
-router.post('/users',async(request,result)=>{
+// add user
+router.post('/',async(request,result)=>{
     try {
         const userAdded = await user.addUser(
             request.body.name,

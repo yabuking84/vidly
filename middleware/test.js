@@ -1,5 +1,8 @@
+// Debugger
+import debug from '../modules/debug.js';
+
 function test(req,res,next){
-    console.log('middleware test...');
+    debug.start('middleware test...');
     next();
 }
 

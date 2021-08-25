@@ -1,3 +1,4 @@
+import debug from '../modules/debug.js';
 import Joi from 'joi';
 import JoiObjectId from 'joi-objectid';
 Joi.objectId = JoiObjectId(Joi);
@@ -115,9 +116,15 @@ function rental(data) {
 function user(data) {
     const schema = {
         "name": Joi.string().min(2).required(),
-        "email": Joi.string().string().email({ minDomainSegments: 2}).required(),
-        "password": Joi.string().min(8).pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
-        "password_confirm": Joi.ref('password')
+        "email": Joi.string().email({ minDomainSegments: 2}).required(),
+        "password": Joi.string().min(8).max(20).pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
+        "password_confirm": Joi.custom(function (val,helpers) {
+            debug.def(val);
+            debug.def(Joi.ref('password'));
+            return val;
+        })
+        // "password_confirm": Joi.ref('password')
+        // "password_confirm": Joi.valid(Joi.ref('password'))
     };    
     return validateData(schema,data);
 }

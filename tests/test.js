@@ -1,3 +1,7 @@
+// Debugger
+import debug from '../modules/debug.js';
+
+
 function returnClass(){
     return TestClass;
 }
@@ -15,5 +19,5 @@ const Yo = returnClass();
 var hey1 = new Yo('111');
 var hey2 = new Yo('2');
 
-console.log(hey1.vars);
-console.log(hey2.vars);
+debug.start(hey1.vars);
+debug.start(hey2.vars);

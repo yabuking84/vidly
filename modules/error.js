@@ -19,11 +19,11 @@ function catchResultError(error,result) {
 function catchRejectError(error,reject){
     try {
         debug.error('Reject Error:',error.message);
-        // check if iit from mongoose validation error
+        // check if from mongoose validation error
         if(error.name === 'ValidationError' ) {
-            debug.error('ValidationError Error:',error.message);
+            debug.error('Mongoose ValidationError Error:',error.message);
             for(let field in error.errors) {
-                debug.error('ValidationError error.errors:',error.errors[field].message);
+                debug.error('Mongoose ValidationError error.errors:',error.errors[field].message);
             }
             return reject(error);
         }

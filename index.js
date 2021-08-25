@@ -46,7 +46,7 @@ const PORT = config.has('port')? config.get('port') : 3000;
 
 
 // getting env secret password variables
-// console.log(config.get('mail.password'));
+// debug.start(config.get('mail.password'));
 
 let asd = 'asdasdd';
 // Debuggers
@@ -73,7 +73,7 @@ import mongoose from 'mongoose';
 
 // must configure mongodb to have replica set to make transactions work 
 
-mongoose.connect('mongodb://localhost/vidly',{
+mongoose.connect('mongodb://localhost:27017/vidly',{
     'useNewUrlParser': true,
     'useFindAndModify': false,
     'useCreateIndex': true,
@@ -84,6 +84,10 @@ mongoose.connect('mongodb://localhost/vidly',{
 })
 .catch((error)=>{
     debug.db('DB Connection Error: ', error);
+});
+
+app.get('/test',function (req, res) {
+    res.send('test');
 });
 
 
@@ -98,5 +102,5 @@ app.use('/api/users',users);
 
 
 app.listen(PORT,(socket)=>{
-    console.log(`listening to PORT: ${PORT}...`);
+    debug.start(`listening to PORT: ${PORT}...`);
 });
