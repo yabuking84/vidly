@@ -1,16 +1,7 @@
 version: "3"
 services:
   vidly-api:
-    build: .
-    # this is for react projects that may have some issues: start
-    stdin_open: true 
-    tty: true 
-    # this is for react projects that may have some issues: end
     ports:
-      - "4000:3030"
-    volumes:
-      - .:/app
+      - "4000:80"
     environment: 
-      - TEST_VARIABLE=testvar
-    env_file: 
-      - ./.env.dev
+      - TEST_VARIABLE=main

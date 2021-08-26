@@ -21,3 +21,6 @@ var hey2 = new Yo('2');
 
 debug.start(hey1.vars);
 debug.start(hey2.vars);
+  
+
+// asdsd
