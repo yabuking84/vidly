@@ -71,9 +71,9 @@ debug.def(var1);
 // DB connection
 import mongoose from 'mongoose';
 
-// must configure mongodb to have replica set to make transactions work 
+// must configure mongodb to have replica set to make transactions work asd
 
-mongoose.connect('mongodb://localhost:27017/vidly',{
+mongoose.connect('mongodb://192.168.1.91:27017/vidly',{
     'useNewUrlParser': true,
     'useFindAndModify': false,
     'useCreateIndex': true,
@@ -87,7 +87,7 @@ mongoose.connect('mongodb://localhost:27017/vidly',{
 });
 
 app.get('/test',function (req, res) {
-    res.send('test');
+    res.send('hi world!!!!');
 });
 
 
