@@ -88,6 +88,8 @@ mongoose.connect('mongodb://mongodb/vidly',{
 
 app.get('/test',function (req, res) {
     res.send('hi world!!!!');
+
+        
 });
 
 

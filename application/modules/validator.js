@@ -5,14 +5,6 @@ Joi.objectId = JoiObjectId(Joi);
 
 import err from './error.js';
 
-function validateData(schema,data) {
-    const validateError =  Joi.object(schema).validate(data).error;
-
-    if(validateError) 
-    err.throwError('InvalidInput',validateError.details[0].message);  
-    
-    return validateError;
-}
 
 function objectId(data) {
     const schema = {
@@ -116,21 +108,44 @@ function rental(data) {
 function user(data) {
     const schema = {
         "name": Joi.string().min(2).required(),
-        "email": Joi.string().email({ minDomainSegments: 2}).required(),
+        "email": Joi.string().min(5).max(255).email({ minDomainSegments: 2}).required(),
+        "contactNo": Joi.string().min(5).max(20),
         "password": Joi.string().min(8).max(20).pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
-        "password_confirm": Joi.custom(function (val,helpers) {
-            debug.def(val);
-            debug.def(Joi.ref('password'));
-            return val;
-        })
+        "password_confirm": Joi.string().min(8).max(20).pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
         // "password_confirm": Joi.ref('password')
         // "password_confirm": Joi.valid(Joi.ref('password'))
-    };    
-    return validateData(schema,data);
+    };
+    return validateData(schema,data, (obj, helpers)=>{
+        // access to the full object above.
+        const { password,password_confirm } = obj;
+
+        // Do your validation
+        const isValid = (password===password_confirm);
+
+        if (!isValid) 
+        err.throwError('InvalidPassword','Password is different!');
+        
+        // Just pass the object on through if things work.
+        return obj;
+    });
 }
 
 
 
+function validateData(schema,data,customFunction=false) {
+
+    let validateError;
+
+    if(!customFunction)
+    validateError =  Joi.object(schema).validate(data).error;
+    else
+    validateError =  Joi.object(schema).custom(customFunction).validate(data).error;
+
+    if(validateError) 
+    err.throwError('InvalidInput',validateError.details[0].message);  
+    
+    return validateError;
+}
 
 
 export default {

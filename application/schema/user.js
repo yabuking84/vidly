@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
 
+import user from '../model/user.js';
+
+import err from '../modules/error.js';
 
 export const userSchema = new mongoose.Schema({
     name: {
@@ -9,23 +12,40 @@ export const userSchema = new mongoose.Schema({
         maxlength: 50,
         trim: true
     },   
+    contactNo: {
+        type: String,
+        minlength: 5,
+        maxlength: 50,
+        trim: true
+    },
     email: {
         type: String,
         required: true,
         validate: {
-            validator: (v)=>{
-
+            validator: async (val)=>{
+                try {
+                    const emailExist = await user.emailExist(val);
+                    if(emailExist)
+                    return false;
+                    else
+                    return true;
+                } catch (error) {
+                    err.throwError('CheckEmailExist',error.message);
+                }
             },
-            message: 'Invalid Email!'
+            message: 'Email already exist!'
         },
         minlength: 3,
-        maxlength: 50,
+        maxlength: 255,
+        unique: true,
         trim: true
     },
     password: {
         type: String,
         required: true,
-        minlength: 8,
-        maxlength: 20
+        minlength: 5,
+        maxlength: 1024
     }
 });
+
+
