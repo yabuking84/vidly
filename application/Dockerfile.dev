@@ -3,7 +3,7 @@ FROM node:14.17
 WORKDIR /app
 
 # or you can use COPY package*.json .
-COPY package*.json /app
+COPY package.json /app
 
 
 # npm install nodemon doesnt need to be explicitly run because its already included in the independencies
@@ -17,8 +17,9 @@ COPY . /app
 
 ENV PORT=3030 \
     DEBUG=app:startup,app:db,app:default,app:error \
-    VIDLY_EMAIL_PASSWORD=vidlysecret
+    VIDLY_EMAIL_PASSWORD=vidlysecret_dev \
+    CHOKIDAR_USEPOLLING=true
 
 EXPOSE 3030 
 
-CMD ["npm","run","start"]
+CMD ["npm","run","dev"]

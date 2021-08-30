@@ -73,7 +73,7 @@ import mongoose from 'mongoose';
 
 // must configure mongodb to have replica set to make transactions work asd
 
-mongoose.connect('mongodb://192.168.1.91:27017/vidly',{
+mongoose.connect('mongodb://mongodb/vidly',{
     'useNewUrlParser': true,
     'useFindAndModify': false,
     'useCreateIndex': true,

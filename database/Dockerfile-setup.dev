@@ -1,0 +1,6 @@
+FROM mongo:5.0.2
+
+# will wait for 10 seconds then run mongo command
+ENTRYPOINT [ "bash", "-c", "sleep 10 && mongo --host mongodb:27017 --eval 'rs.initiate()'"]        
+
+
