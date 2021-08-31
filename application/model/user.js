@@ -4,6 +4,9 @@ import debug from '../modules/debug.js';
 import err from '../modules/error.js';
 
 import {userSchema} from '../schema/user.js';
+import _ from "lodash";
+
+import hash from '../modules/hash.js';
 
 const User = mongoose.model('Users',userSchema);
 
@@ -15,12 +18,15 @@ function addUser(name,email,password,password_confirm){return new Promise(async(
             name,email,password,password_confirm
         });
 
+        const hashedPassword = await hash.run(password);
+
         const userNew = await new User({
             name,
             email,
-            password
+            password:hashedPassword
         }).save();
-        resolve(userNew);
+
+        resolve(_.pick(userNew,['_id','name','email']));
 
     } catch (error) {
         err.catchRejectError(error,reject);

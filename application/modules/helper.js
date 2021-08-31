@@ -5,3 +5,4 @@ export function currency(num){
 export function price(num){
     return parseFloat(num).toFixed(2);
 }
+
