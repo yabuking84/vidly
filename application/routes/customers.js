@@ -7,6 +7,8 @@ import  err from '../modules/error.js';
 
 import customer from "../model/customer.js";
 
+import authentication from '../middleware/auth.js';
+
 router.get('/', async(request,result)=>{
     try {
         const customers = await customer.getAllCustomers();
@@ -45,7 +47,7 @@ router.post('/find',async(request,result)=>{
 });
 
 
-router.post('/',async(request,result)=>{
+router.post('/',authentication.employee,async(request,result)=>{
     try {
         const customerAdded = await customer.addCustomer(request.body.name,request.body.age,request.body.rank);
         result.send(customerAdded);  

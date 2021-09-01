@@ -18,7 +18,9 @@ COPY . /app
 ENV PORT=3030 \
     DEBUG=app:startup,app:db,app:default,app:error \
     VIDLY_EMAIL_PASSWORD=vidlysecret_dev \
-    CHOKIDAR_USEPOLLING=true
+    VIDLY_JWT_KEY=ethylforlife \
+    CHOKIDAR_USEPOLLING=true \
+    NODE_ENV=development
 
 EXPOSE 3030 
 

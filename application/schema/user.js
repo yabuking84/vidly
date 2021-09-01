@@ -3,8 +3,10 @@ import mongoose from 'mongoose';
 import user from '../model/user.js';
 
 import err from '../modules/error.js';
+import jwt from 'jsonwebtoken';
+import config from 'config';
 
-export const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -33,7 +35,7 @@ export const userSchema = new mongoose.Schema({
                     err.throwError('CheckEmailExist',error.message);
                 }
             },
-            message: 'Email already exist!'
+            message: 'User already exist!'
         },
         minlength: 3,
         maxlength: 255,
@@ -48,4 +50,10 @@ export const userSchema = new mongoose.Schema({
     }
 });
 
+// Add a method to the User Model
+userSchema.methods.generateAuthToken = function(){
+    return jwt.sign({_id:this._id}, config.get('jwt_key'));
+};
 
+
+export {userSchema};

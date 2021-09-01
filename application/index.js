@@ -19,6 +19,7 @@ import config from 'config';
 import helmet from 'helmet';
 import morgan from 'morgan';
 
+import err from './modules/error.js';
 
 import testMiddleware, {var1} from './middleware/test.js';
 
@@ -33,8 +34,10 @@ import rentals from './routes/rentals.js';
 import users from './routes/users.js';
 import auth from './routes/auth.js';
 
-const app = express();
+import authenticated from './middleware/auth.js';
 
+
+const app = express();
 
 
 app.use(express.static('public'));
@@ -52,9 +55,21 @@ const PORT = config.has('port')? config.get('port') : 3000;
 let asd = 'asdasdd';
 // Debuggers
 debug.start("Starting...");
+debug.def("NODE_ENV = ",NODE_ENV);
+debug.def(config.get('name'));
 debug.def(config.get('mail.password'));
+debug.def(config.get('jwt_key'));
 debug.error("test error");
 
+
+// check for needed variables
+try {
+    if(!config.has('jwt_key') || !config.get('jwt_key'))
+    err.throwError('StartupError','JWT Private Key not defined!');        
+} catch (error) {
+    debug.error(error.message);
+    process.exit(1);
+}
 
 
 // Helps secure your apps by setting various HTTP headers.
@@ -73,7 +88,6 @@ debug.def(var1);
 import mongoose from 'mongoose';
 
 // must configure mongodb to have replica set to make transactions work asd
-
 mongoose.connect('mongodb://mongodb/vidly',{
     'useNewUrlParser': true,
     'useFindAndModify': false,
@@ -100,8 +114,8 @@ app.use('/api/customers',customers);
 app.use('/api/movies',movies);
 app.use('/api/rentals',rentals);
 app.use('/api/users',users);
-app.use('/api/auth',auth);
-// ssdasd
+app.use('/api/login',auth);
+// Routes
 
 
 app.listen(PORT,(socket)=>{

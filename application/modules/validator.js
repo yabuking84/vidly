@@ -132,6 +132,16 @@ function user(data) {
 
 
 
+function userLogin(data) {
+    const schema = {
+        "email": Joi.string().min(5).max(255).email({ minDomainSegments: 2}).required(),
+        "password": Joi.string().min(8).max(20).pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
+    };
+    return validateData(schema,data);
+}
+
+
+
 function validateData(schema,data,customFunction=false) {
 
     let validateError;
@@ -160,5 +170,6 @@ export default {
     movieUpdate,
     movieDelete,
     rental,
-    user
+    user,
+    userLogin
 };

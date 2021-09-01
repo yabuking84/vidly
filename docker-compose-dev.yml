@@ -9,7 +9,7 @@ services:
     volumes:
       - ./application:/app
     depends_on:
-      - mongodb
+      - mongosetup
     networks: 
       - vidly-network
     # this is for react projects that may have some issues: start
@@ -24,7 +24,9 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - mongodb-vol:/var/lib/mongodb
+      - ./database/db_data:/var/lib/mongodb
+      # Using docker volumes has issues with replication when mongodb docker container is restarted
+      # - mongodb-vol:/var/lib/mongodb
     networks: 
       - vidly-network
 
@@ -43,6 +45,6 @@ networks:
   vidly-network:
     driver: bridge
 
-volumes: 
-  mongodb-vol:
-    driver: local
+# volumes: 
+#   mongodb-vol:
+#     driver: local

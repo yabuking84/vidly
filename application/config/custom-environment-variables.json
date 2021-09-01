@@ -1,5 +1,6 @@
 {
     "mail": {
         "password": "VIDLY_EMAIL_PASSWORD"
-    }
+    },
+    "jwt_key": "VIDLY_JWT_KEY"
 }

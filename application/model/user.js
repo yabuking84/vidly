@@ -10,7 +10,14 @@ import hash from '../modules/hash.js';
 
 const User = mongoose.model('Users',userSchema);
 
-
+function getUser(id){return new Promise(async(resolve,reject)=>{
+    try {
+        const user = User.findById(id).select('-password -_id -__v');
+        resolve(user);
+    } catch (error) {
+        err.catchRejectError(error,reject);
+    }
+});}
 
 function addUser(name,email,password,password_confirm){return new Promise(async(resolve,reject)=>{
     try {
@@ -47,5 +54,6 @@ function emailExist(email){return new Promise(async(resolve,reject)=>{
 
 export default {
     addUser,
-    emailExist
+    emailExist,
+    getUser
 };
