@@ -34,7 +34,6 @@ import rentals from './routes/rentals.js';
 import users from './routes/users.js';
 import auth from './routes/auth.js';
 
-import auth0 from './modules/auth0.js';
 
 
 const app = express();
@@ -107,6 +106,19 @@ app.get('/test',function (req, res) {
         
 });
 
+
+// Auth0 middleware
+
+debug.def(config.get('auth0.issuerBaseURL'));
+debug.def(config.get('auth0.baseURL'));
+debug.def(config.get('auth0.clientID'));
+debug.def(config.get('auth0.secret'));
+
+
+// Auth0 test
+import auth0TestRoute from './routes/auth0-test.js';
+app.use('/auth0-test',auth0TestRoute);
+// Auth0 test
 
 // Routes
 app.use('/api/genres',genres);

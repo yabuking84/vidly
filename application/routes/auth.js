@@ -20,20 +20,5 @@ router.post('/login',async (request,result)=>{
     }
 });
 
-router.get('/callback',async(request,result)=>{
-    try {
-        request.send(true);
-    } catch (error) {
-        err.catchResultError(error,result);
-    }
-});
-
-router.get('/logout',async(request,result)=>{
-    try {
-        request.send(true);
-    } catch (error) {
-        err.catchResultError(error,result);
-    }
-});
 
 export default router;

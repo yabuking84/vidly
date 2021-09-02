@@ -10,11 +10,16 @@ import jwt from 'jsonwebtoken';
 function loggedIn(request,result,next){
     try {
         const token = request.header('x-auth-token');
-        if(!token) err.throwError('InvalidToken','Access Denied Invalid Token!'); 
-        
-        const decoded = jwt.verify(token,config.get('jwt_key'));
 
-        // so you can get the decoded data by request.user
+        // Using JWT
+        if(!token) 
+        err.throwError('InvalidToken','Access Denied Invalid Token!'); 
+
+        // Using Auth0 
+        // if(typeof request.oidc === 'undefined' || !request.oidc.isAuthenticated())
+        // err.throwError('InvalidCredentials','Access Denied!'); 
+
+        const decoded = jwt.verify(token,config.get('jwt_key'));
         request.user = decoded;
 
         next();
