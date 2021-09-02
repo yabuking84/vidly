@@ -19,6 +19,15 @@ function getUser(id){return new Promise(async(resolve,reject)=>{
     }
 });}
 
+function getAllUsers(){return new Promise(async(resolve,reject)=>{
+    try {
+        const users = User.find().select('-password -_id -__v');
+        resolve(users);
+    } catch (error) {
+        err.catchRejectError(error,reject);
+    }
+});}
+
 function addUser(name,email,password,password_confirm){return new Promise(async(resolve,reject)=>{
     try {
         validator.user({
@@ -55,5 +64,6 @@ function emailExist(email){return new Promise(async(resolve,reject)=>{
 export default {
     addUser,
     emailExist,
-    getUser
+    getUser,
+    getAllUsers
 };

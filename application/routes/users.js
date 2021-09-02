@@ -5,10 +5,10 @@ const router = express.Router();
 import err from '../modules/error.js';
 import user from '../model/user.js';
 
-import authenticated from '../middleware/auth.js';
+import authorization from '../middleware/auth.js';
 
 // get user
-router.get('/details',authenticated.employee,async(request,result)=>{
+router.get('/details',authorization.loggedIn,async(request,result)=>{
     try {
         const userFound = await user.getUser(request.user._id);
         result.send(userFound);
@@ -19,7 +19,7 @@ router.get('/details',authenticated.employee,async(request,result)=>{
 
 
 // add user
-router.post('/add',async(request,result)=>{
+router.post('/add',authorization.loggedIn,async(request,result)=>{
     try {
         const userAdded = await user.addUser(
             request.body.name,
@@ -28,6 +28,17 @@ router.post('/add',async(request,result)=>{
             request.body.password_confirm
         );
         result.send(userAdded);
+    } catch (error) {
+        err.catchResultError(error,result);
+    }
+});
+
+
+// get all user
+router.get('/all',[authorization.loggedIn,authorization.admin],async(request,result)=>{
+    try {
+        const users = await user.getAllUsers();
+        result.send(users);
     } catch (error) {
         err.catchResultError(error,result);
     }

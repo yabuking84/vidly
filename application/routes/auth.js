@@ -8,7 +8,7 @@ import auth from '../model/auth.js';
 
 import debug from '../modules/debug.js';
 
-router.post('/',async (request,result)=>{
+router.post('/login',async (request,result)=>{
     try {
         const token = await auth.loginUser(
             request.body.email,
@@ -20,5 +20,20 @@ router.post('/',async (request,result)=>{
     }
 });
 
+router.get('/callback',async(request,result)=>{
+    try {
+        request.send(true);
+    } catch (error) {
+        err.catchResultError(error,result);
+    }
+});
+
+router.get('/logout',async(request,result)=>{
+    try {
+        request.send(true);
+    } catch (error) {
+        err.catchResultError(error,result);
+    }
+});
 
 export default router;

@@ -47,7 +47,7 @@ router.post('/find',async(request,result)=>{
 });
 
 
-router.post('/',authentication.employee,async(request,result)=>{
+router.post('/',authentication.loggedIn,async(request,result)=>{
     try {
         const customerAdded = await customer.addCustomer(request.body.name,request.body.age,request.body.rank);
         result.send(customerAdded);  
@@ -65,8 +65,8 @@ router.put('/',async(request,result)=>{
     }
 });
 
-
-router.delete('/delete',async(request,result)=>{
+// for routes that needs to be logged in and has an admin role
+router.delete('/delete',[authentication.loggedIn,authentication.admin],async(request,result)=>{
     try {
         const customerDeleted = await customer.deleteCustomer(request.body.id);
         result.send(customerDeleted);

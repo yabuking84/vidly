@@ -7,7 +7,7 @@ import config from 'config';
 
 import jwt from 'jsonwebtoken';
 
-function employee(request,result,next){
+function loggedIn(request,result,next){
     try {
         const token = request.header('x-auth-token');
         if(!token) err.throwError('InvalidToken','Access Denied Invalid Token!'); 
@@ -25,7 +25,23 @@ function employee(request,result,next){
 }
 
 
+function admin(request,result,next){
+    try {
+
+        // check if admin
+        if(request.user.role!=='admin') 
+        err.throwError('InvalidRole','Role invalid!');
+
+        next();
+            
+    } catch (error) {
+        err.catchResultError(error,result);
+    }
+}
+
+
 
 export default {
-    employee
+    loggedIn,
+    admin
 };
