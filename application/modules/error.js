@@ -1,22 +1,27 @@
 import debug from './debug.js';
 
-function catchResultError(error,result) {
+function catchResponse(error,response, status=400) {
     try {
-        debug.error('Result Error:',error.message);
-        let status = 400;  
-        if(error.name == 'NotFound') status = 404;
-        return result.status(status).send(error.message);
+        debug.error('Response Error Name:',error.name);
+        debug.error('Response Error:',error.message);
+        
+        if(error.name == 'NotFound') 
+        status = 404;
+        if(error.name == 'MongooseServerSelectionError') 
+        status = 500;
+
+        return response.status(status).send(error.message);
     } catch (err) {
         debug.error(err);
-        debug.error('Result catchResultError Error:',err);
+        debug.error('Response catchResponse Error:',err);
         let status = 400; 
-        return result.status(status).send(err);
+        return response.status(status).send(err);
     }        
 }
 
 
 
-function catchRejectError(error,reject){
+function catchReject(error,reject){
     try {
         debug.error('Reject Error:',error.message);
         // check if from mongoose validation error
@@ -36,7 +41,6 @@ function catchRejectError(error,reject){
 
 
 
-
 function throwError(errorName,errorMessage){
     debug.error('Throw Error:',errorMessage);
     const error = new Error(errorMessage);
@@ -45,7 +49,7 @@ function throwError(errorName,errorMessage){
 }
 
 
-function getError(errorName,errorMessage){
+function createError(errorName,errorMessage){
     debug.error('Get Error:',errorMessage);
     const error = new Error(errorMessage);
     error.name = errorName; 
@@ -55,10 +59,10 @@ function getError(errorName,errorMessage){
 
 
 export default {
-    catchResultError,
-    catchRejectError,
+    catchResponse,
+    catchReject,
     throwError,
-    getError
+    createError
 };
 
 

@@ -9,69 +9,69 @@ import customer from "../model/customer.js";
 
 import authentication from '../middleware/auth.js';
 
-router.get('/', async(request,result)=>{
+router.get('/', async(request,response)=>{
     try {
         const customers = await customer.getAllCustomers();
-        result.send(customers);
+        response.send(customers);
     } catch (error) {
-        err.catchResultError(error,result);
+        err.catchResponse(error,response);
     }
 });
 
-router.get('/page/:pageNum', async(request,result)=>{
+router.get('/page/:pageNum', async(request,response)=>{
     try {
         const customers = await customer.getAllCustomers(request.params.pageNum);
-        result.send(customers);
+        response.send(customers);
     } catch (error) {
-        err.catchResultError(error,result);
+        err.catchResponse(error,response);
     }
 });
 
-router.post('/find',async(request,result)=>{
+router.post('/find',async(request,response)=>{
     try {
         const customerFound = await customer.getCustomerByName(request.body.name);
         // if rank is gold
         if(customerFound.rank == 'gold') {
             const emailSent = await customer.sendCustomerEmail(customerFound);
-            result.send({
+            response.send({
                 ...customerFound.toObject(),
                 emailSent: (emailSent)?true:false
             });
         } else {
-            result.send(customerFound);            
+            response.send(customerFound);            
         }
         
     } catch (error) {
-        err.catchResultError(error,result);
+        err.catchResponse(error,response);
     }
 });
 
 
-router.post('/',authentication.loggedIn,async(request,result)=>{
+router.post('/',authentication.loggedIn,async(request,response)=>{
     try {
         const customerAdded = await customer.addCustomer(request.body.name,request.body.age,request.body.rank);
-        result.send(customerAdded);  
+        response.send(customerAdded);  
     } catch(error) {
-        err.catchResultError(error,result);
+        err.catchResponse(error,response);
     }
 });
 
-router.put('/',async(request,result)=>{
+router.put('/',async(request,response)=>{
     try {
         const customerUpdated = await customer.updateCustomer(request.body.id,request.body.name,request.body.rank);
-        result.send(customerUpdated);  
+        response.send(customerUpdated);  
     } catch (error) {
-        err.catchResultError(error,result);
+        err.catchResponse(error,response);
     }
 });
 
 // for routes that needs to be logged in and has an admin role
-router.delete('/delete',[authentication.loggedIn,authentication.admin],async(request,result)=>{
+router.delete('/delete',[authentication.loggedIn,authentication.admin],async(request,response)=>{
     try {
         const customerDeleted = await customer.deleteCustomer(request.body.id);
-        result.send(customerDeleted);
+        response.send(customerDeleted);
     } catch (error) {
-        err.catchResultError(error,result);
+        err.catchResponse(error,response);
     }
 });
 

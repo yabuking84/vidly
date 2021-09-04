@@ -7,7 +7,7 @@ import config from 'config';
 
 import jwt from 'jsonwebtoken';
 
-function loggedIn(request,result,next){
+function loggedIn(request,response,next){
     try {
         const token = request.header('x-auth-token');
 
@@ -15,22 +15,18 @@ function loggedIn(request,result,next){
         if(!token) 
         err.throwError('InvalidToken','Access Denied Invalid Token!'); 
 
-        // Using Auth0 
-        // if(typeof request.oidc === 'undefined' || !request.oidc.isAuthenticated())
-        // err.throwError('InvalidCredentials','Access Denied!'); 
-
         const decoded = jwt.verify(token,config.get('jwt_key'));
         request.user = decoded;
 
         next();
             
     } catch (error) {
-        err.catchResultError(error,result);
+        next(error);
     }
 }
 
 
-function admin(request,result,next){
+function admin(request,response,next){
     try {
 
         // check if admin
@@ -40,7 +36,7 @@ function admin(request,result,next){
         next();
             
     } catch (error) {
-        err.catchResultError(error,result);
+        next(error);
     }
 }
 

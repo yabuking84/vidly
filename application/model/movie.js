@@ -29,7 +29,7 @@ function getAllMovies(page=0){return new Promise(async(resolve,reject)=>{
         else
         err.throwError('Empty','Movies empty!');
     } catch (error) {
-        err.catchRejectError(error ,reject);
+        err.catchReject(error ,reject);
     }
 });}
 
@@ -58,7 +58,7 @@ function addMovie(name,genreId,inStock,dailyRentalRate){return new Promise(async
         resolve(retVal);
 
     } catch (error) {
-        err.catchRejectError(error ,reject);
+        err.catchReject(error ,reject);
     }
 });}
 
@@ -115,7 +115,7 @@ function updateMovie(movieId,newName,newGenreId,dailyRentalRate){return new Prom
         resolve("Nothing to update!");
 
     } catch (error) {
-        err.catchRejectError(error ,reject);
+        err.catchReject(error ,reject);
     }
 });}
 
@@ -133,7 +133,7 @@ function deleteMovie(movieId){return new Promise(async (resolve,reject)=>{
         err.throwError('NotFound','Delete failed! Movie not found!');
         
     } catch (error) {
-        err.catchRejectError(error ,reject);
+        err.catchReject(error ,reject);
     }
 });}
 
@@ -148,7 +148,7 @@ function findMovieById(movieId){return new Promise(async(resolve,reject)=>{
         else
         err.throwError('NotFound','Movie not found!');        
     } catch (error) {
-        err.catchRejectError(error,reject);
+        err.catchReject(error,reject);
     }
 });}
 

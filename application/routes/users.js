@@ -8,18 +8,18 @@ import user from '../model/user.js';
 import authorization from '../middleware/auth.js';
 
 // get user
-router.get('/details',authorization.loggedIn,async(request,result)=>{
+router.get('/details',authorization.loggedIn,async(request,response)=>{
     try {
         const userFound = await user.getUser(request.user._id);
-        result.send(userFound);
+        response.send(userFound);
     } catch (error) {
-        err.catchResultError(error,result);
+        err.catchResponse(error,response);
     }
 });
 
 
 // add user
-router.post('/add',authorization.loggedIn,async(request,result)=>{
+router.post('/add',authorization.loggedIn,async(request,response)=>{
     try {
         const userAdded = await user.addUser(
             request.body.name,
@@ -27,20 +27,20 @@ router.post('/add',authorization.loggedIn,async(request,result)=>{
             request.body.password,
             request.body.password_confirm
         );
-        result.send(userAdded);
+        response.send(userAdded);
     } catch (error) {
-        err.catchResultError(error,result);
+        err.catchResponse(error,response);
     }
 });
 
 
 // get all user
-router.get('/all',[authorization.loggedIn,authorization.admin],async(request,result)=>{
+router.get('/all',[authorization.loggedIn,authorization.admin],async(request,response)=>{
     try {
         const users = await user.getAllUsers();
-        result.send(users);
+        response.send(users);
     } catch (error) {
-        err.catchResultError(error,result);
+        err.catchResponse(error,response);
     }
 });
 
@@ -52,14 +52,14 @@ router.get('/all',[authorization.loggedIn,authorization.admin],async(request,res
 // import mongoose from 'mongoose';
 // import {userSchema} from '../schema/user.js';
 // const User = mongoose.model('Users',userSchema);
-// router.get('/test',(request,result)=>{
+// router.get('/test',(request,response)=>{
 //     try {
 //         User.find().then((val)=>{
 //             console.log('val',val);
-//             result.send(val);
+//             response.send(val);
 //         });
 //     } catch (error) {
-//         err.catchResultError(error,result);
+//         err.catchResponse(error,response);
 //     }
 // });
 

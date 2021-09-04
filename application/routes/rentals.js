@@ -6,30 +6,30 @@ import  err from '../modules/error.js';
 
 import rental from '../model/rental.js';
 
-router.get('/',async(request,result)=>{
+router.get('/',async(request,response)=>{
     try {
         const rentalsFound = await  rental.getAllRentals();
-        result.send(rentalsFound);
+        response.send(rentalsFound);
     } catch (error) {
-        err.catchResultError(error,result);
+        err.catchResponse(error,response);
     }
 });
 
-router.get('/page/:page', async (request,result)=>{
+router.get('/page/:page', async (request,response)=>{
     try {
         const data = await rental.getAllRentals(request.params.page);
-        result.send(data);
+        response.send(data);
     } catch (error) {
-        err.catchResultError(error,result);
+        err.catchResponse(error,response);
     }
 });
 
-router.post('/', async(request,result)=>{
+router.post('/', async(request,response)=>{
     try {
         const data = await rental.addRental(request.body.customerId,request.body.movieId);
-        result.send(data);
+        response.send(data);
     } catch (error) {
-        err.catchResultError(error,result);
+        err.catchResponse(error,response);
     }
 });
 

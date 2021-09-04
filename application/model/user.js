@@ -15,7 +15,7 @@ function getUser(id){return new Promise(async(resolve,reject)=>{
         const user = User.findById(id).select('-password -_id -__v');
         resolve(user);
     } catch (error) {
-        err.catchRejectError(error,reject);
+        err.catchReject(error,reject);
     }
 });}
 
@@ -24,7 +24,7 @@ function getAllUsers(){return new Promise(async(resolve,reject)=>{
         const users = User.find().select('-password -_id -__v');
         resolve(users);
     } catch (error) {
-        err.catchRejectError(error,reject);
+        err.catchReject(error,reject);
     }
 });}
 
@@ -45,7 +45,7 @@ function addUser(name,email,password,password_confirm){return new Promise(async(
         resolve(_.pick(userNew,['_id','name','email']));
 
     } catch (error) {
-        err.catchRejectError(error,reject);
+        err.catchReject(error,reject);
     }
 });}
 
@@ -57,7 +57,7 @@ function emailExist(email){return new Promise(async(resolve,reject)=>{
         else 
         resolve(false);
     } catch (error) {
-        err.catchRejectError(error,reject);
+        err.catchReject(error,reject);
     }
 });}
 

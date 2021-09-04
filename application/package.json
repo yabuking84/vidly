@@ -27,7 +27,8 @@
     "lodash": "^4.17.21",
     "mongoose": "^5.13.7",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.12"
+    "nodemon": "^2.0.12",
+    "winston": "^3.3.3"
   },
   "type": "module"
 }

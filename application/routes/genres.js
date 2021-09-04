@@ -1,71 +1,67 @@
 import express from 'express';
 const router = express.Router();
 
-import  err from '../modules/error.js';
+import err from '../modules/error.js';
+import errMiddleware from '../middleware/error.js';
 
 import genre from '../model/genre.js';
 
 
-router.get('/',async (request,result)=>{
+router.get('/',async (request,response)=>{
     try {
         const data = await genre.getAllGenres();
-        result.send(data);
+        response.send(data);
     } catch (error) {
-        err.catchResultError(error,result);   
+        err.catchResponse(error,response);   
     }
 
 });
 
-router.get('/page/:page', async (request,result)=>{
+router.get('/page/:page', async (request,response)=>{
     try {
         const data = await genre.getAllGenres(request.params.page);
-        result.send(data);
+        response.send(data);
     } catch (error) {
-        err.catchResultError(error,result);
-    }
-});
-
-router.post('/find',async (request,result)=>{
-    try {
-        const genreFound = await genre.getGenreByName(request.body.name);
-        return result.send(genreFound);  
-    } catch (error) {
-        return err.catchResultError(error,result);
+        err.catchResponse(error,response);
     }
 });
 
 
-
-router.post('/', async (request,result)=>{
-    try {
-        const genreAdded = await genre.addGenre(request.body.name);
-        return result.send(genreAdded);  
-    } catch (error) {
-        return err.catchResultError(error,result);
-    }
-});
+// get genre by name
+router.post('/find', errMiddleware.asyncRouteHandler( async (request,response)=>{
+    const genreFound = await genre.getGenreByName(request.body.name);
+    response.send(genreFound);  
+}));
 
 
+// add genre
+router.post('/', errMiddleware.asyncRouteHandler( async (request,response)=>{
+    const genreAdded = await genre.addGenre(request.body.name);
+    response.send(genreAdded);  
+}));
 
 
-router.put('/', async (request,result)=>{
+
+
+// update genre
+router.put('/', async (request,response)=>{
     try {
         const genreUpdated = await genre.updateGenre(request.body.id,request.body.name);
-        return result.send(genreUpdated);  
+        response.send(genreUpdated);  
     } catch (error) {
-        return err.catchResultError(error,result);
+        err.catchResponse(error,response);
     }
 });
 
 
 
-router.delete('/delete', async (request,result)=>{
+router.delete('/delete', async (request,response)=>{
     try {
 
         const genreDeleted = await genre.deleteGenre(request.body.id);
-        return result.send(genreDeleted);  
+        return response.send(genreDeleted);  
     } catch (error) {
-        return err.catchResultError(error,result);
+        return err.catchResponse(error,response);
     }
 });
 

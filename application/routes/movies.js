@@ -6,25 +6,25 @@ import movie from "../model/movie.js";
 
 import debug from '../modules/debug.js';
 
-router.get('/', async(request,result)=>{
+router.get('/', async(request,response)=>{
     try {
         const moviesFound = await movie.getAllMovies();
-        result.send(moviesFound);
+        response.send(moviesFound);
     } catch (error) {
-        err.catchResultError(error,result);
+        err.catchResponse(error,response);
     }
 });
 
-router.get('/page/:page', async (request,result)=>{
+router.get('/page/:page', async (request,response)=>{
     try {
         const data = await movie.getAllMovies(request.params.page);
-        result.send(data);
+        response.send(data);
     } catch (error) {
-        err.catchResultError(error,result);
+        err.catchResponse(error,response);
     }
 });
 
-router.post('/',async(request,result)=>{
+router.post('/',async(request,response)=>{
     try {
         const movieAdded = await movie.addMovie(
             request.body.name,
@@ -32,14 +32,14 @@ router.post('/',async(request,result)=>{
             request.body.inStock,
             request.body.dailyRentalRate
         );
-        result.send(movieAdded);
+        response.send(movieAdded);
     } catch (error) {
-        err.catchResultError(error,result);
+        err.catchResponse(error,response);
     }
 });
 
 
-router.put('/',async(request,result)=>{
+router.put('/',async(request,response)=>{
     try {
         const movieUpdated = await movie.updateMovie(
             request.body.movieId,
@@ -47,22 +47,22 @@ router.put('/',async(request,result)=>{
             request.body.genreId,
             request.body.dailyRentalRate
         );
-        result.send(movieUpdated);
+        response.send(movieUpdated);
     } catch (error) {
-        err.catchResultError(error,result);
+        err.catchResponse(error,response);
     }
 });
 
 
 
-router.delete('/',async(request,result)=>{
+router.delete('/',async(request,response)=>{
     try {
         const movieDeleted = await movie.deleteMovie(
             request.body.movieId
         );
-        result.send(movieDeleted);
+        response.send(movieDeleted);
     } catch (error) {
-        err.catchResultError(error,result);
+        err.catchResponse(error,response);
     }
 });
 

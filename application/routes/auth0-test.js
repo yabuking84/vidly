@@ -1,35 +1,44 @@
 import express from "express";
 const router = express.Router();
 import err from '../modules/error.js';
+import debug from "../modules/debug.js";
+import auth0 from '../authentication/auth0.js';
 
-import auth0 from '../middleware/auth0.js';
 
-router.get('/',async(request,result)=>{
+router.get('/',async(request,response)=>{
     try {
-        result.send('auth0');
+        response.send('auth0');
     } catch (error) {
-        err.catchResultError(error,result);
+        err.catchResponse(error,response);
     }
 });
 
-router.get('/secure1',auth0.middleware,async(request,result)=>{
+router.post('/callback',async(request,response)=>{
     try {
-        const token = request.header('bearer');
-
-        result.send(token);
+        response.send('callback');
     } catch (error) {
-        err.catchResultError(error,result);
+        err.catchResponse(error,response);
     }
 });
 
-router.get('/yoyo',async(request,result)=>{
+router.get('/secure1',auth0.middleware(),async(request,response)=>{
     try {
+        debug.def('/secure1 request.oidc',request.oidc.user);
+        response.send('secure1');
+    } catch (error) {
+        err.catchResponse(error,response);
+    }
+});
+
+router.get('/yoyo',async(request,response)=>{
+    try {
+        debug.def('/yoyo request.oidc',request.oidc.user);
         if(typeof request.oidc !== 'undefined' && request.oidc.isAuthenticated())
-        result.send('yoyo Logged in!');
+        response.send('yoyo Logged in!');
         else 
-        result.send('yoyo Not logged in!');
+        response.send('yoyo Not logged in!');
     } catch (error) {
-        err.catchResultError(error,result);
+        err.catchResponse(error,response);
     }
 });
 

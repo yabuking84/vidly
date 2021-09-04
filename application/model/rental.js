@@ -36,7 +36,7 @@ function getAllRentals(page=0){return new Promise(async(resolve,reject)=>{
         else
         err.throwError('Empty','Rentals empty!');        
     } catch (error) {
-        err.catchRejectError(error, reject);
+        err.catchReject(error, reject);
     }
 });}
 
@@ -84,7 +84,7 @@ function addRental(customerId,movieId){return new Promise(async(resolve,reject)=
     } catch (error) {
         // transaction rollback
         await session.abortTransaction();
-        err.catchRejectError(error,reject);
+        err.catchReject(error,reject);
     }
 
 

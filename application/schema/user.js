@@ -64,7 +64,7 @@ userSchema.methods.generateAuthToken = function(){
             role:this.role
         }, 
         config.get('jwt_key'), 
-        {expiresIn:60*3}
+        {expiresIn:60*360}
     );
 };
 

@@ -86,7 +86,7 @@ debug.def(var1);
 // DB connection
 import mongoose from 'mongoose';
 
-// must configure mongodb to have replica set to make transactions work asd
+// must configure mongodb to enable replica set to make transactions work
 mongoose.connect('mongodb://mongodb/vidly',{
     'useNewUrlParser': true,
     'useFindAndModify': false,
@@ -100,14 +100,7 @@ mongoose.connect('mongodb://mongodb/vidly',{
     debug.db('DB Connection Error: ', error);
 });
 
-app.get('/test',function (req, res) {
-    res.send('hi world!!!!');
 
-        
-});
-
-
-// Auth0 middleware
 
 debug.def(config.get('auth0.issuerBaseURL'));
 debug.def(config.get('auth0.baseURL'));
@@ -116,8 +109,15 @@ debug.def(config.get('auth0.secret'));
 
 
 // Auth0 test
+//////////////////////////////////////////////////////////
+// add Auth0 middleware to /auth0-test
+import auth0 from './authentication/auth0.js';
+app.use('/auth0-test',auth0.router);
+
+// add routes to /auth0-test
 import auth0TestRoute from './routes/auth0-test.js';
 app.use('/auth0-test',auth0TestRoute);
+//////////////////////////////////////////////////////////
 // Auth0 test
 
 // Routes
@@ -127,9 +127,45 @@ app.use('/api/movies',movies);
 app.use('/api/rentals',rentals);
 app.use('/api/users',users);
 app.use('/api/auth',auth);
+
+// test middleware with response
+app.use('/route-test',(request,response,next)=>{
+    console.log('/route-test middleware');
+    response.send('middleware with response!');
+});
+
+// shutdown nodejs 
+// not working, make it work later
+app.get('/shutdown/nodejs/gracefully',(request,response)=>{
+    process.on('SIGTERM', () => {
+        console.log('Process terminating gracefully..');
+        server.close(() => {
+          console.log('Process terminated gracefully!');
+        });
+    });   
+});
+app.get('/shutdown/nodejs/immediately',(request,response)=>{
+    process.exit(); // or use SIGKILL 
+});
+
+
+// shutdown mongodb
+app.get('/shutdown/mongodb/gracefully',(request,response)=>{
+    mongoose.connection.db.command({
+        shutdown : 1
+    }, function(err, result) {
+        console.log('mongodb shutdown - ', err.message);
+    });
+    response.send('shutting down mongodb... ');
+});
+
+// error middleware
+import error from './middleware/error.js';
+app.use(error.middleware);
 // Routes
 
 
-app.listen(PORT,(socket)=>{
+const server = app.listen(PORT,(socket)=>{
     debug.start(`listening to PORT: ${PORT}...`);
 });
+

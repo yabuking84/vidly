@@ -26,7 +26,7 @@ function getAllCustomers(page=0){ return new Promise( async (resolve,reject)=>{
         else 
         err.throwError('Empty','Customers empty!');
     } catch (error) {
-        err.catchRejectError(error ,reject);
+        err.catchReject(error ,reject);
     }       
 });}
 
@@ -54,7 +54,7 @@ function getCustomerByName(name) { return new Promise(async(resolve,reject)=>{
 
 
     } catch (error) {
-        err.catchRejectError(error ,reject);
+        err.catchReject(error ,reject);
     }   
 
 });}
@@ -70,7 +70,7 @@ function findCustomerById(customerId) { return new Promise(async (resolve,reject
         else 
         err.throwError('NotFound','Customer not found!');        
     } catch (error) {
-        err.catchRejectError(error ,reject);
+        err.catchReject(error ,reject);
     }
 });}
 
@@ -80,7 +80,7 @@ function sendCustomerEmail(customer) { return new Promise(async (resolve,reject)
         const emailSent = await simulateEmail(customer.name);
         resolve(emailSent);
     } catch (error) {
-        err.catchRejectError(error ,reject);
+        err.catchReject(error ,reject);
     }        
 });}
 
@@ -100,7 +100,7 @@ function addCustomer(name,age,rank) { return new Promise(async(resolve,reject)=>
         resolve(retVal);
 
     } catch (error) {
-        err.catchRejectError(error ,reject);
+        err.catchReject(error ,reject);
     }    
 });}
 
@@ -135,7 +135,7 @@ function updateCustomer(id,name,rank) {return new Promise(async(resolve,reject)=
         }
 
     } catch (error) {
-        err.catchRejectError(error ,reject);
+        err.catchReject(error ,reject);
     }
 });}
 
@@ -155,7 +155,7 @@ function deleteCustomer(id){return new Promise(async(resolve,reject)=>{
         err.throwError('NotFound','Delete failed! Customer not found!');
 
     } catch (error) {
-        err.catchRejectError(error,reject);
+        err.catchReject(error,reject);
     }
 });}
 
@@ -188,7 +188,7 @@ function simulateEmail(name){return new Promise((resolve,reject)=>{
             // throw error if needed when error is not sent
             // err.throwError('EmailFailed',`Customer: ${name}'s email not sent!`);
         } catch (error) {
-            err.catchRejectError(error ,reject);
+            err.catchReject(error ,reject);
         }
     },2000);        
 });}

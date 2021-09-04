@@ -4,6 +4,8 @@ import debug from '../modules/debug.js';
 
 import  err from '../modules/error.js';
 
+import errMiddleware from '../middleware/error.js';
+
 import mongoose from 'mongoose';
 
 import { genreSchema } from '../schema/genre.js';
@@ -30,32 +32,29 @@ function getAllGenres(page=0){ return new Promise(async (resolve, reject)=>{
         else 
         err.throwError('Empty','Genres empty!');        
     } catch (error) {
-        err.catchRejectError(error ,reject);
+        err.catchReject(error ,reject);
     }
 
 });}
 
-function getGenreByName(name){ return new Promise(async (resolve, reject)=>{
-    try {
-        // validate input
-       validator.genre({
-            name
-        });
 
-        const genreFound = await Genre
-        .findOne({name})
-        .select({
-            name:1
-        });
 
-        if(genreFound)
-        return resolve(genreFound);
-        else 
-        err.throwError('NotFound','Genre not found!');    
+function getGenreByName(name){ return errMiddleware.asyncModelHandler( async (resolve,reject)=>{
+    // validate input
+    validator.genre({
+        name
+    });
 
-    } catch (error) {
-        err.catchRejectError(error ,reject);
-    }
+    const genreFound = await Genre
+    .findOne({name})
+    .select({
+        name:1
+    });
+
+    if(genreFound)
+    return resolve(genreFound);
+    else 
+    err.throwError('NotFound','Genre not found!');    
 });}
 
 
@@ -64,29 +63,24 @@ function countGenre(genreId){return new Promise(async(resolve,reject)=>{
         const qty = await Genre.countDocuments({_id:genreId});
         resolve(qty);
     } catch (error) {
-        err.catchRejectError(error ,reject);
+        err.catchReject(error ,reject);
     }
 });}
 
 
-function addGenre(name){ return new Promise(async (resolve, reject)=>{
-    try {
-        // validate input
-        validator.genre({
-            name
-        });
 
-        const genreNew = new Genre({
-            name: name
-        });
-        const retVal = await genreNew.save();
-        resolve(retVal);
-        
-        
-    } catch (error) {
-        err.catchRejectError(error ,reject);
-    }
 
+function addGenre(name){ return errMiddleware.asyncModelHandler( async (resolve,reject)=>{
+    // validate input
+    validator.genre({
+        name
+    });
+
+    const genreNew = new Genre({
+        name: name
+    });
+    const retVal = await genreNew.save();
+    resolve(retVal);
 });}
 
 
@@ -110,7 +104,7 @@ function updateGenre(id,name){return new Promise(async (resolve,reject)=>{
         err.throwError('NotFound','Update failed! Genre not found!');
 
     } catch (error) {
-        err.catchRejectError(error ,reject);
+        err.catchReject(error ,reject);
     }
 });}
 
@@ -128,7 +122,7 @@ function deleteGenre(id){return new Promise(async(resolve,reject)=>{
         err.throwError('NotFound','Delete failed! Genre not found!');        
         
     } catch (error) {
-        err.catchRejectError(error ,reject);
+        err.catchReject(error ,reject);
     }
 });}
 

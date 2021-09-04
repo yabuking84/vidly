@@ -29,7 +29,7 @@ function loginUser(email,password){return new Promise(async(resolve,reject)=>{
         resolve(token);
 
     } catch (error) {
-        err.catchRejectError(error,reject);
+        err.catchReject(error,reject);
     }
 });}
 
