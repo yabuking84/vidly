@@ -19,6 +19,7 @@ import config from 'config';
 import helmet from 'helmet';
 import morgan from 'morgan';
 
+
 import err from './modules/error.js';
 
 import testMiddleware, {var1} from './middleware/test.js';
@@ -34,6 +35,8 @@ import rentals from './routes/rentals.js';
 import users from './routes/users.js';
 import auth from './routes/auth.js';
 
+// testing if imported modules are being executed, and they are being executed.
+// import testRequire from './tests/test-require.js';
 
 
 const app = express();
@@ -47,11 +50,6 @@ app.use(express.urlencoded({extended:true}));
 const NODE_ENV = app.get('env');
 const PORT = config.has('port')? config.get('port') : 3000;
 
-
-// getting env secret password variables
-// debug.start(config.get('mail.password'));
-
-let asd = 'asdasdd';
 // Debuggers
 debug.start("Starting...");
 debug.def("NODE_ENV = ",NODE_ENV);
@@ -74,10 +72,12 @@ try {
 // Helps secure your apps by setting various HTTP headers.
 app.use(helmet());
 
+// Morgan Logger for http access logs
 // HTTP request logger. create a write stream (in append mode) to write to log file
 const __dirname = path.resolve();
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs/access.log'), { flags: 'a' })
 app.use(morgan('tiny', { stream: accessLogStream }));
+
 
 // tawing's custom test middleware
 app.use(testMiddleware);
