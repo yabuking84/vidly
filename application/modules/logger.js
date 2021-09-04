@@ -13,12 +13,13 @@ const printFormat = format.printf((info) => {
   
 
 
-export const logger = winston.createLogger({
+const logger = winston.createLogger({
     level: 'info',
     meta: true,   
     transports: [
         // new winston.transports.Console(),
         new winston.transports.File({ 
+            level: 'info',
             filename: 'logs/winston/all.log',
             format: format.combine(
                 // format.errors({ stack: true }), // <-- needed if you want error stack on printFormat
@@ -67,6 +68,23 @@ function error(error){
 
 }
 
+function initHandleExceptions(){
+
+    // handle UncaughtException Errors
+    process.on('uncaughtException',(ex)=>{
+        logger.error(ex);
+        // process.exit(1);
+    });
+
+    // handle UnhandledRejection Errors
+    process.on('unhandledRejection',(ex)=>{
+        logger.error(ex);
+        // process.exit(1);
+    });
+
+}
+
 export default {
-    error
+    error,
+    initHandleExceptions
 };

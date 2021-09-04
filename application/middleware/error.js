@@ -35,7 +35,7 @@ function asyncRouteHandler(handle){
         }
     };
 }
-function asyncModelHandler(handle){
+function asyncPromiseHandler(handle){
     return new Promise(async (resolve,reject)=>{
         try {
             await handle(resolve,reject);
@@ -49,5 +49,5 @@ function asyncModelHandler(handle){
 export default  {
     middleware,
     asyncRouteHandler,
-    asyncModelHandler    
+    asyncPromiseHandler    
 };
