@@ -7,7 +7,7 @@ import auth0TestRoute from '../routes/auth0-test.js';
    
 
 // testing if imported modules are being executed, and they are being executed.
-// import testRequire from '../tests/test-require.js';
+// import testRequire from '../modules/experiments/experiment-require.js';
 
 function init(app) {
 

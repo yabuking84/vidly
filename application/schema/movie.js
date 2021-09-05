@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import * as helper from '../modules/helper.js';
+import helper from '../modules/helper.js';
 
 export const movieSchema = new mongoose.Schema({
     name :{

@@ -4,10 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "start": "node index.js",
     "dev": "nodemon"
   },
+  "jest": {
+    "roots": [
+      "tests"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "moduleFileExtensions": ["js", "json", "es6"],
+    "testEnvironment": "jest-environment-node",
+    "transform": {}    
+  },  
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -31,5 +42,8 @@
     "winston": "^3.3.3",
     "winston-mongodb": "^5.0.7"
   },
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "jest": "^27.1.0"
+  }
 }

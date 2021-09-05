@@ -1,6 +1,6 @@
 import validator from '../modules/validator.js';
 import  err from '../modules/error.js';
-import * as helper from '../modules/helper.js';
+import helper from '../modules/helper.js';
 
 
 

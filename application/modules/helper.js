@@ -1,8 +1,12 @@
-export function currency(num){
+function currency(num){
     return Math.round((num + Number.EPSILON) * 100) / 100;
 }
 
-export function price(num){
+function price(num){
     return parseFloat(num).toFixed(2);
 }
 
+export default {
+    currency,
+    price
+};

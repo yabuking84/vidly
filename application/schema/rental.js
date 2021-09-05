@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import * as helper from '../modules/helper.js';
+import helper from '../modules/helper.js';
 
 import { customerMiniSchema } from './customer.js';
 import { movieMiniSchema } from './movie.js';

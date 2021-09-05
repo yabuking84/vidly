@@ -22,7 +22,7 @@ function middleware(error,request,response,next){
         debug.error('Middleware Error (Try Catch):',err);
         let status = 500; 
         return response.status(status).send(err);
-    }       
+    }
 }
 
 // for encapsulating try catch

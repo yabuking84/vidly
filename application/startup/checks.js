@@ -2,6 +2,7 @@ import config from 'config';
 
 import debug from '../modules/debug.js';
 import err from '../modules/error.js';
+import logger from '../modules/logger.js';
 
 function init(){
 
@@ -11,6 +12,7 @@ function init(){
         err.throwError('StartupError','JWT Private Key not defined!');        
     } catch (error) {
         debug.error(error.message);
+        logger.error(error);
         process.exit(1);
     }
 

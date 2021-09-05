@@ -1,13 +1,7 @@
 import validator from '../modules/validator.js';
-
-import debug from '../modules/debug.js';
-
 import  err from '../modules/error.js';
-
-import errMiddleware from '../middleware/error.js';
-
+import em from '../middleware/error.js';
 import mongoose from 'mongoose';
-
 import { genreSchema } from '../schema/genre.js';
 
 const Genre = mongoose.model('Genres',genreSchema);
@@ -39,7 +33,7 @@ function getAllGenres(page=0){ return new Promise(async (resolve, reject)=>{
 
 
 
-function getGenreByName(name){ return errMiddleware.asyncPromiseHandler( async (resolve,reject)=>{
+function getGenreByName(name){ return em.asyncPromiseHandler( async (resolve,reject)=>{
     // validate input
     validator.genre({
         name
