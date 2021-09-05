@@ -66,6 +66,16 @@ function init(app) {
         ex_1.action_ex1('from exmain3');
         response.send(true);
     });
+    
+    app.get('/breakapp',(request,response)=>{
+
+        // this can actually break the app!! 
+        // app.get = function(){
+        //     console.log("BREAK!");
+        // };
+        response.send(true);
+        
+    });
     //////////////////////////////////////////////////////////
     // test on import is being cached
 
