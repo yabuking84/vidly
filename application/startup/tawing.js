@@ -5,6 +5,8 @@ import testMiddleware, {var1} from '../middleware/test.js';
 import auth0 from '../authentication/auth0.js';
 import auth0TestRoute from '../routes/auth0-test.js';
    
+import ex_1 from '../modules/experiments/ex_1.js';
+import ex_2 from '../modules/experiments/ex_2.js';
 
 // testing if imported modules are being executed, and they are being executed.
 // import testRequire from '../modules/experiments/experiment-require.js';
@@ -36,6 +38,36 @@ function init(app) {
     app.use('/auth0-test',auth0TestRoute);
     //////////////////////////////////////////////////////////
     // Auth0 test
+
+    // test on import is being cached
+    //////////////////////////////////////////////////////////
+    app.get('/exmain1',(request,response)=>{
+
+        ex_2.action_ex2 = function(){
+            console.log('replaced in ex3.js');
+        };
+        
+        ex_1.action_ex1('from exmain1');
+        response.send(true);
+    });
+
+    app.get('/exmain2',(request,response)=>{
+
+        ex_2.action_ex2 = function(){
+            console.log('replaced asdsadasd');
+        };
+        
+        ex_1.action_ex1('from exmain2');
+        response.send(true);
+    });
+
+    app.get('/exmain3',(request,response)=>{
+
+        ex_1.action_ex1('from exmain3');
+        response.send(true);
+    });
+    //////////////////////////////////////////////////////////
+    // test on import is being cached
 
     debug.def(config.get('auth0.issuerBaseURL'));
     debug.def(config.get('auth0.baseURL'));

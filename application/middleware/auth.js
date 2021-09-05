@@ -9,7 +9,7 @@ import jwt from 'jsonwebtoken';
 
 function loggedIn(request,response,next){
     try {
-        const token = request.header('x-auth-token');
+        const token = request.header('authorization').split("Bearer ")[1];
 
         // Using JWT
         if(!token) 

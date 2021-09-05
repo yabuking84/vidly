@@ -21,4 +21,9 @@ describe('fizzbuzz()',()=>{
         const rslt = fizzbuzz(10);
         expect(rslt).toBe('Buzz');
     });
+
+    it('should return input if not divisible by 3 or 5',()=>{
+        const rslt = fizzbuzz(7);
+        expect(rslt).toBe(7);
+    });
 });
