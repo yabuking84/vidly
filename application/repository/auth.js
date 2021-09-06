@@ -6,10 +6,11 @@ import mongoose from 'mongoose';
 
 import bcrypt from 'bcrypt';
 
+import userModel from './user.js';
+
+const User = userModel.getModel();
 
 
-import {userSchema} from '../schema/user.js';
-const User = mongoose.model('Users',userSchema);
 
 function loginUser(email,password){return new Promise(async(resolve,reject)=>{
     try {

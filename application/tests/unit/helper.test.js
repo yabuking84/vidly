@@ -1,4 +1,4 @@
-import helper from '../modules/helper.js';
+import helper from '../../modules/helper.js';
 
 describe('currency()',()=>{
     it('should round to 2 decimal points as currency',()=>{

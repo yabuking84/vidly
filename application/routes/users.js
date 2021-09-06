@@ -3,7 +3,7 @@ const router = express.Router();
 
 // import debug from '../modules/debug.js';
 import err from '../modules/error.js';
-import user from '../model/user.js';
+import user from '../repository/user.js';
 
 import authorization from '../middleware/auth.js';
 

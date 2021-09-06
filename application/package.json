@@ -15,10 +15,14 @@
     "testPathIgnorePatterns": [
       "/node_modules/"
     ],
-    "moduleFileExtensions": ["js", "json", "es6"],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "es6"
+    ],
     "testEnvironment": "jest-environment-node",
-    "transform": {}    
-  },  
+    "transform": {}
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -39,6 +43,7 @@
     "mongoose": "^5.13.7",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.12",
+    "serialize-json": "^1.0.3",
     "winston": "^3.3.3",
     "winston-mongodb": "^5.0.7"
   },

@@ -4,7 +4,7 @@ const router = express.Router();
 import err from '../modules/error.js';
 import em from '../middleware/error.js';
 
-import genre from '../model/genre.js';
+import genre from '../repository/genre.js';
 
 
 router.get('/',async (request,response)=>{

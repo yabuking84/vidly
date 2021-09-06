@@ -17,6 +17,10 @@ import { findMovieById } from './movie.js';
 const Rental = mongoose.model('Rentals',rentalSchema);
 
 
+function getModel(){
+    return Rental;    
+}
+
 function getAllRentals(page=0){return new Promise(async(resolve,reject)=>{
     try {
         const pageNum = (page>0)?page:1;    
@@ -97,6 +101,7 @@ function addRental(customerId,movieId){return new Promise(async(resolve,reject)=
 
 
 export default {
+    getModel,
     getAllRentals,
     addRental    
 };

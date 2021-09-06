@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 import  err from '../modules/error.js';
 
-import movie from "../model/movie.js";
+import movie from "../repository/movie.js";
 
 import debug from '../modules/debug.js';
 

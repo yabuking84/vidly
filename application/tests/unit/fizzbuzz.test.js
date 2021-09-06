@@ -1,10 +1,10 @@
 // this is needed because ES6 modules is being used
 import {jest} from '@jest/globals';
 
-import fizzbuzz from '../experiments/fizzbuzz.js';
-import lib from '../experiments/jest-mock/lib.js';
-import mail from '../experiments/jest-mock/mail.js';
-import db from '../experiments/jest-mock/db.js';
+import fizzbuzz from '../../experiments/fizzbuzz.js';
+import lib from '../../experiments/jest-mock/lib.js';
+import mail from '../../experiments/jest-mock/mail.js';
+import db from '../../experiments/jest-mock/db.js';
 
 
 // you should create it() more or equal to execution paths

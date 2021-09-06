@@ -8,6 +8,9 @@ const Genre = mongoose.model('Genres',genreSchema);
 
 
 
+function getModel(){
+    return Genre;    
+}
 
 function getAllGenres(page=0){ return new Promise(async (resolve, reject)=>{
     try {
@@ -133,6 +136,7 @@ export {countGenre};
 
 
 export default {
+    getModel,
     getAllGenres,
     getGenreByName,
     countGenre,

@@ -13,6 +13,13 @@ import { movieSchema } from '../schema/movie.js';
 
 const Movie  = mongoose.model('Movies',movieSchema);
 
+
+
+function getModel(){
+    return Movie;    
+}
+
+
 function getAllMovies(page=0){return new Promise(async(resolve,reject)=>{
     try {
         const pageNum = (page>0)?page:1;
@@ -159,6 +166,7 @@ function findMovieById(movieId){return new Promise(async(resolve,reject)=>{
 export {findMovieById};
 
 export default {
+    getModel,
     getAllMovies,
     addMovie,
     updateMovie,

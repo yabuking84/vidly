@@ -9,6 +9,10 @@ import { customerSchema } from '../schema/customer.js';
 const Customer = mongoose.model('Customers',customerSchema);
 
 
+function getModel(){
+    return Customer;    
+}
+
 function getAllCustomers(page=0){ return new Promise( async (resolve,reject)=>{
     try {
         
@@ -236,6 +240,7 @@ class TestAsync {
 export {findCustomerById};
 
 export default {
+    getModel,
     getAllCustomers,
     getCustomerByName,
     findCustomerById,

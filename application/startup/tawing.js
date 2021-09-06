@@ -5,8 +5,8 @@ import testMiddleware, {var1} from '../middleware/test.js';
 import auth0 from '../authentication/auth0.js';
 import auth0TestRoute from '../routes/auth0-test.js';
    
-import ex_1 from '../modules/experiments/ex_1.js';
-import ex_2 from '../modules/experiments/ex_2.js';
+import ex_1 from '../experiments/ex_1.js';
+import ex_2 from '../experiments/ex_2.js';
 
 // testing if imported modules are being executed, and they are being executed.
 // import testRequire from '../modules/experiments/experiment-require.js';

@@ -5,7 +5,7 @@ import debug from '../modules/debug.js';
 
 import  err from '../modules/error.js';
 
-import customer from "../model/customer.js";
+import customer from "../repository/customer.js";
 
 import authentication from '../middleware/auth.js';
 

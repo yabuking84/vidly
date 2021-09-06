@@ -4,7 +4,7 @@ const router = express.Router();
 import debug from '../modules/debug.js';
 import  err from '../modules/error.js';
 
-import rental from '../model/rental.js';
+import rental from '../repository/rental.js';
 
 router.get('/',async(request,response)=>{
     try {

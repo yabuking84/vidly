@@ -1,5 +1,5 @@
 // Debugger
-import debug from '../debug.js';
+import debug from '../modules/debug.js';
 
 
 function returnClass(){
