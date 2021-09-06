@@ -7,7 +7,7 @@ import em from '../middleware/error.js';
 import genre from '../repository/genre.js';
 
 
-router.get('/',async (request,response)=>{
+router.get('/', async (request,response)=>{
     try {
         const data = await genre.getAllGenres();
         response.send(data);

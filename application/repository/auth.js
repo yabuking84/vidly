@@ -6,9 +6,9 @@ import mongoose from 'mongoose';
 
 import bcrypt from 'bcrypt';
 
-import userModel from './user.js';
+import user from './user.js';
 
-const User = userModel.getModel();
+const User = user.getModel();
 
 
 
