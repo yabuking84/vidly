@@ -19,7 +19,7 @@ userSchema.methods.generateAuthToken = function(){
 
 const Model = mongoose.model('Users',userSchema);
 
-
+// asd
 
 export default {
     Model
