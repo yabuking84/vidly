@@ -6,7 +6,6 @@ import lib from '../../experiments/jest-mock/lib.js';
 import mail from '../../experiments/jest-mock/mail.js';
 import db from '../../experiments/jest-mock/db.js';
 
-
 // you should create it() more or equal to execution paths
 describe('fizzbuzz()',()=>{
     it('should throw Error if input type is not a number',()=>{
@@ -73,7 +72,7 @@ describe('Jest Mock Functions', ()=>{
     it('should send and email to the customer',()=>{
         
         db.getCustomerSync = jest.fn().mockReturnValue({id:1,email:'b@c.com'});
-        const customer = db.getCustomerSync(1);
+        const customer = db.getCustomerSync(2);
 
         // this will replace mail.send() inside lib.notifyCustomer()'s' 
         mail.send = jest.fn();
@@ -95,3 +94,4 @@ describe('Jest Mock Functions', ()=>{
         expect(mail.send.mock.calls[0][1]).toMatch(/order/i); // <-- i means case insensitive
     });
 });
+

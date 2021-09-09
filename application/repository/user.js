@@ -7,6 +7,7 @@ import _ from "lodash";
 
 import hash from '../modules/hash.js';
 
+import User from '../model/user.js'; 
 
 function getUser(id){return new Promise(async(resolve,reject)=>{
     try {

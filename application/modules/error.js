@@ -40,6 +40,26 @@ function catchReject(error,reject){
 }
 
 
+// for encapsulating try catch
+function asyncRouteHandler(handle){
+    return async (request,response,next)=>{
+        try {
+            await handle(request,response);
+        } catch (error) {
+            next(error);
+        } 
+    };
+}
+function asyncPromiseHandler(handle){
+    return new Promise(async (resolve,reject)=>{
+        try {
+            await handle(resolve,reject);
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
 
 function throwError(errorName,errorMessage){
     debug.error('Throw Error:',errorMessage);
@@ -62,7 +82,9 @@ export default {
     catchResponse,
     catchReject,
     throwError,
-    createError
+    createError,
+    asyncRouteHandler,
+    asyncPromiseHandler    
 };
 
 

@@ -2,5 +2,6 @@
     "name":"Vidly",
     "db": {
         "connectionUrl": "mongodb://mongodb/vidly"
-    }    
+    },
+    "jwt_key": "defaultkey"
 }

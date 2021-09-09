@@ -2,7 +2,6 @@ import express from 'express';
 const router = express.Router();
 
 import err from '../modules/error.js';
-import em from '../middleware/error.js';
 
 import genre from '../repository/genre.js';
 
@@ -28,14 +27,14 @@ router.get('/page/:page', async (request,response)=>{
 
 
 // get genre by name
-router.post('/find', em.asyncRouteHandler( async (request,response)=>{
+router.post('/find', err.asyncRouteHandler( async (request,response)=>{
     const genreFound = await genre.getGenreByName(request.body.name);
     response.send(genreFound);  
 }));
 
 
 // add genre
-router.post('/', em.asyncRouteHandler( async (request,response)=>{
+router.post('/', err.asyncRouteHandler( async (request,response)=>{
     const genreAdded = await genre.addGenre(request.body.name);
     response.send(genreAdded);  
 }));

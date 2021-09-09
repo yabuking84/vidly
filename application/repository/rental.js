@@ -14,6 +14,8 @@ import { findCustomerById } from './customer.js';
 import { findMovieById } from './movie.js';
 
 
+import Rental from '../model/rental.js'; 
+
 function getAllRentals(page=0){return new Promise(async(resolve,reject)=>{
     try {
         const pageNum = (page>0)?page:1;    

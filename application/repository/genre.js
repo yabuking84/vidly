@@ -2,6 +2,7 @@ import validator from '../modules/validator.js';
 import  err from '../modules/error.js';
 import em from '../middleware/error.js';
 
+import Genre from '../model/genre.js'; 
 
 function getAllGenres(page=0){ return new Promise(async (resolve, reject)=>{
     try {
