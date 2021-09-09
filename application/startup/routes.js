@@ -1,12 +1,14 @@
-import genres from '../routes/genres.js';
-import customers from '../routes/customers.js';
-import movies from '../routes/movies.js';
-import rentals from '../routes/rentals.js';
-import users from '../routes/users.js';
-import auth from '../routes/auth.js';
+import genres from '../controller/genres.js';
+import customers from '../controller/customers.js';
+import movies from '../controller/movies.js';
+import rentals from '../controller/rentals.js';
+import users from '../controller/users.js';
+import auth from '../controller/auth.js';
+
 
 import error from '../middleware/error.js';
 
+console.log(global);
 
 function init(app){
     app.use('/api/genres',genres);

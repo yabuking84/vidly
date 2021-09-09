@@ -10,16 +10,9 @@ import _ from "lodash";
 import mongoose from 'mongoose';
 const conn = mongoose.connection;
 
-import { rentalSchema } from '../schema/rental.js';
 import { findCustomerById } from './customer.js';
 import { findMovieById } from './movie.js';
 
-const Rental = mongoose.model('Rentals',rentalSchema);
-
-
-function getModel(){
-    return Rental;    
-}
 
 function getAllRentals(page=0){return new Promise(async(resolve,reject)=>{
     try {
@@ -101,7 +94,6 @@ function addRental(customerId,movieId){return new Promise(async(resolve,reject)=
 
 
 export default {
-    getModel,
     getAllRentals,
     addRental    
 };
