@@ -1,3 +1,7 @@
 {
-    "name":"Vidly Test Mode"
+    "name":"Vidly Test Mode",
+    "port": 3333,
+    "db": {
+        "connectionUrl": "mongodb://mongo/vidly_tests"
+    }
 }
