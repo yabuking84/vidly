@@ -8,8 +8,9 @@ services:
       - "3030:3030"
     volumes:
       - ./application:/app
-    depends_on:
-      - mongosetup
+    # will be using MongoDb Atlas
+    # depends_on:
+    #   - mongosetup
     networks: 
       - vidly-network
     # this is for react projects that may have some issues: start
@@ -17,29 +18,29 @@ services:
     tty: true 
     # this is for react projects that may have some issues: end
 
-  mongodb:
-    build:
-      context: ./database
-      dockerfile: Dockerfile.dev
-    ports:
-      - "27017:27017"
-    volumes:
-      - ./database/db_data:/var/lib/mongodb
-      # Using docker volumes has issues with replication when mongodb docker container is restarted
-      # - mongodb-vol:/var/lib/mongodb
-    networks: 
-      - vidly-network
+  # mongodb:
+  #   build:
+  #     context: ./database
+  #     dockerfile: Dockerfile.dev
+  #   ports:
+  #     - "27017:27017"
+  #   volumes:
+  #     - ./database/db_data:/var/lib/mongodb
+  #     # Using docker volumes has issues with replication when mongodb docker container is restarted
+  #     # - mongodb-vol:/var/lib/mongodb
+  #   networks: 
+  #     - vidly-network
 
-  # this sets up mongodb to run rs.initiate() for transactions and replication to work 
-  mongosetup:
-    build:
-      context: ./database
-      dockerfile: Dockerfile-setup.dev
-    depends_on:
-      - mongodb
-    restart: "no"
-    networks: 
-      - vidly-network
+  # # this sets up mongodb to run rs.initiate() for transactions and replication to work 
+  # mongosetup:
+  #   build:
+  #     context: ./database
+  #     dockerfile: Dockerfile-setup.dev
+  #   depends_on:
+  #     - mongodb
+  #   restart: "no"
+  #   networks: 
+  #     - vidly-network
 
 networks: 
   vidly-network:

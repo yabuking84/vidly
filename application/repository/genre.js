@@ -28,7 +28,7 @@ function getAllGenres(page=0){ return new Promise(async (resolve, reject)=>{
 
 
 
-function getGenreByName(name){ return em.asyncPromiseHandler( async (resolve,reject)=>{
+function getGenreByName(name){ return err.asyncPromiseHandler( async (resolve,reject)=>{
     // validate input
     validator.genre({
         name
@@ -59,7 +59,7 @@ function countGenre(genreId){return new Promise(async(resolve,reject)=>{
 
 
 
-function addGenre(name){ return errMiddleware.asyncPromiseHandler( async (resolve,reject)=>{
+function addGenre(name){ return err.asyncPromiseHandler( async (resolve,reject)=>{
     // validate input
     validator.genre({
         name

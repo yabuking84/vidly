@@ -11,34 +11,37 @@ import checks from './startup/checks.js';
 import loggers from './startup/loggers.js';
 
 
-// START APP
-const app = express();
-
-// START LOGGERS
-loggers.init(app);
-
-// START MISC CHECKS
-checks.init();
-
-// START MONGODB CONNECTION
-database.init();
-
-// START MIDDLEWARE
-middlewares.init(app);
-
-// START ROUTES
-routes.init(app);
 
 
 
 
-// Some random experiments and tests
-tawing.init(app);
+function start(mode='development'){
+
+
+    // START APP
+    const app = express();
+
+    // START LOGGERS
+    loggers.init(app);
+
+    // START MISC CHECKS
+    checks.init();
+
+    // START MONGODB CONNECTION
+    database.init(mode);
+
+    // START MIDDLEWARE
+    middlewares.init(app);
+
+    // START ROUTES
+    routes.init(app);
 
 
 
 
-function start(){
+    // Some random experiments and tests
+    tawing.init(app);    
+
     const PORT = config.has('port')? config.get('port') : 3000;
     return app.listen(PORT,(socket)=>{
         debug.start(`listening to PORT: ${PORT}...`);

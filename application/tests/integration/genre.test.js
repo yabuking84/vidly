@@ -8,7 +8,7 @@ const Genre = genreModel.Model;
 
 describe('/api/genres', ()=>{
     beforeEach( async ()=>{
-        server = await app.start();
+        server = await app.start('test');
     });
     afterEach(async ()=>{
         await server.close();
