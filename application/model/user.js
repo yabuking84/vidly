@@ -21,6 +21,4 @@ const Model = mongoose.model('Users',userSchema);
 
 // asd
 
-export default {
-    Model
-};
+export default Model;

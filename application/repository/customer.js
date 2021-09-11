@@ -2,6 +2,8 @@ import validator from '../modules/validator.js';
 import debug from '../modules/debug.js';
 import err from '../modules/error.js';
 
+import Customer from '../model/customer.js'; 
+
 
 function getAllCustomers(page=0){ return new Promise( async (resolve,reject)=>{
     try {

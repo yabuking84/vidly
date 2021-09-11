@@ -8,6 +8,9 @@ import auth0TestRoute from '../controller/auth0-test.js';
 import ex_1 from '../experiments/ex_1.js';
 import ex_2 from '../experiments/ex_2.js';
 
+
+
+
 // testing if imported modules are being executed, and they are being executed.
 // import testRequire from '../modules/experiments/experiment-require.js';
 
@@ -78,6 +81,23 @@ function init(app) {
     });
     //////////////////////////////////////////////////////////
     // test on import is being cached
+
+
+    // jest experiment
+    ///////////////////////////////////////////////////////////
+    // app.get('/jest',(request,response)=>{
+    //     const user = { 
+    //         _id: mongoose.Types.ObjectId().toHexString(),
+    //         role:'admin'
+    //       };
+    //     const token  = new User(user).generateAuthToken();
+    //     const req = {
+    //         header: jest.fn().mockReturnValue(token)
+    //     };
+    //     debug.def('req',req);
+    // });
+    ///////////////////////////////////////////////////////////
+    // jest experiment
 
     debug.def(config.get('auth0.issuerBaseURL'));
     debug.def(config.get('auth0.baseURL'));

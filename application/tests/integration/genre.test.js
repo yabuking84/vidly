@@ -7,11 +7,11 @@ const Genre = genreModel.Model;
 
 
 describe('/api/genres', ()=>{
-    beforeEach(()=>{
-        server = app.start();
+    beforeEach( async ()=>{
+        server = await app.start();
     });
     afterEach(async ()=>{
-        server.close();
+        await server.close();
         await Genre.remove({});
     });
 

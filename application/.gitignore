@@ -114,3 +114,10 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Jest Coverage files
+coverage/
+
+
+# config-npm env files
+config/

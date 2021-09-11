@@ -10,6 +10,8 @@ import  err from '../modules/error.js';
 import {countGenre as countTheGenre} from './genre.js';
 
 
+import MovieModel from '../model/movie.js'; 
+const Movie = MovieModel.Model; 
 
 function getAllMovies(page=0){return new Promise(async(resolve,reject)=>{
     try {

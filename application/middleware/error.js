@@ -25,29 +25,8 @@ function middleware(error,request,response,next){
     }
 }
 
-// for encapsulating try catch
-function asyncRouteHandler(handle){
-    return async (request,response,next)=>{
-        try {
-            await handle(request,response);
-        } catch (error) {
-            next(error);
-        }
-    };
-}
-function asyncPromiseHandler(handle){
-    return new Promise(async (resolve,reject)=>{
-        try {
-            await handle(resolve,reject);
-        } catch (error) {
-            reject(error);
-        }
-    });
-}
 
 
 export default  {
-    middleware,
-    asyncRouteHandler,
-    asyncPromiseHandler    
+    middleware
 };

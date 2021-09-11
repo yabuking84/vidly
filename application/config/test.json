@@ -2,6 +2,9 @@
     "name":"Vidly Test Mode",
     "port": 3333,
     "db": {
-        "connectionUrl": "mongodb://mongo/vidly_tests"
+        "username": "vidly_test",
+        "password": "THyvooGylKyoHh4g",
+        "protocol": "mongodb+srv://",
+        "url": "cluster0.71mma.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
     }
 }
