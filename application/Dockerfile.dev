@@ -25,7 +25,14 @@ ENV PORT=3030 \
     VIDLY_AUTH0_ISSUERBASEURL=https://yabuking84.auth0.com \
     VIDLY_AUTH0_BASEURL=http://localhost:3030 \
     VIDLY_AUTH0_CLIENTID=5976mBcu5cs3C0RbdSQPVSErsMZLM6Ew \
-    VIDLY_AUTH0_SECRET=vidly_auth0_supersecret
+    VIDLY_AUTH0_SECRET=vidly_auth0_supersecret \
+    # DB 
+    VIDLY_DB_PROTOCOL=mongodb+srv:// \
+    VIDLY_DB_USERNAME=vidly_test_user \
+    VIDLY_DB_PASSWORD=xAJIEOqcJG6crf12 \
+    VIDLY_DB_URL=cluster0.71mma.mongodb.net \
+    VIDLY_DB_DATABASE=vidly \
+    VIDLY_DB_OPTIONS=retryWrites=true&w=majority
 
 
 EXPOSE 3030 
