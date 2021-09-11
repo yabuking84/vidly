@@ -1,7 +1,10 @@
 {
     "name":"Vidly",
     "db": {
-        "connectionUrl": "mongodb://mongodb/vidly"
+        "username": "",
+        "password": "",
+        "protocol": "mongodb://",
+        "url": "mongodb/vidly"
     },
     "jwt_key": "defaultkey"
 }

@@ -117,3 +117,7 @@ dist
 
 # Jest Coverage files
 coverage/
+
+
+# config-npm env files
+config/

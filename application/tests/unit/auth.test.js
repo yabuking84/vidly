@@ -8,7 +8,7 @@ import mongoose from 'mongoose';
 import Auth from '../../middleware/auth.js';
 
 
-// UserLogin functions
+// UserLogin functions ...
 describe('UserLogin', ()=>{
 
     // this will test lib.notifyCustomer() if mail.send() was called
