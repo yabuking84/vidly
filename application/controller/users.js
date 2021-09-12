@@ -55,7 +55,7 @@ router.get('/all',[authorization.loggedIn,authorization.admin],async(request,res
 // router.get('/test',(request,response)=>{
 //     try {
 //         User.find().then((val)=>{
-//             console.log('val',val);
+//             // console.log(('val',val);
 //             response.send(val);
 //         });
 //     } catch (error) {

@@ -4,27 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test:unit": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --testPathPattern=tests/unit --verbose",
-    "test:integration": "NODE_ENV=test node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --testPathPattern=tests/integration",
-    "test:unit-coverage": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --testPathPattern=tests/unit --verbose --coverage",
-    "test:integration-coverage": "NODE_ENV=test node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --testPathPattern=tests/integration --coverage",
+    "test:unit": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --testPathPattern=tests/unit",
+    "test:integration": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --testPathPattern=tests/integration",
+    "test:unit-coverage": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --testPathPattern=tests/unit --coverage",
+    "test:integration-coverage": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --testPathPattern=tests/integration --coverage",
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
   "jest": {
-    "roots": [
-      "tests"
-    ],
-    "testTimeout": 20000,
-    "testPathIgnorePatterns": [
-      "/node_modules/"
-    ],
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "es6"
-    ],
-    "testEnvironment": "jest-environment-node",
     "transform": {}
   },
   "author": "",

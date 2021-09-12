@@ -5,36 +5,48 @@ import logger from '../modules/logger.js';
 import config from 'config';
 
 
-function init(mode='development') {
+async function init(mode='development') {
 
-    let dbConnectionUrl = `${config.get('db.protocol')}`+
-        `${config.get('db.username')}:${config.get('db.password')}`+
-        `@${config.get('db.url')}`+
-        `/${config.get('db.database')}`+
-        `?${config.get('db.options')}`;
-    
+    let db_protocol = `${config.get('db.protocol')}`;
+    let db_username = `${config.get('db.username')}`;
+    let db_password = `${config.get('db.password')}`;
+    let db_url = `${config.get('db.url')}`;
+    let db_database = `${config.get('db.database')}`;
+    let db_options = `${config.get('db.options')}`;
+
+    // debug.start("NODE_ENV = ",process.env.NODE_ENV);
+
+    debug.db(`Connecting to ${db_url}/${db_database}...`);
+
     // when running integration tests
     if(mode=='test') {
-        dbConnectionUrl = `${config.get('db.protocol')}`+
-        `${config.get('db.username')}:${config.get('db.password')}`+
-        `@${config.get('db.url')}`+
-        `/${config.get('db.database')}_test`+
-        `?${config.get('db.options')}`;    
+        db_database = `${db_database}_test`;
     }
 
-    mongoose.connect(dbConnectionUrl,{
+    const dbConnectionUrl = `${db_protocol}`+
+        `${db_username}`+
+        `:${db_password}`+
+        `@${db_url}`+
+        `/${db_database}`+
+        `?${db_options}`;
+
+    const options = {
         'useNewUrlParser': true,
         'useFindAndModify': false,
         'useCreateIndex': true,
         'useUnifiedTopology': true
-    })
-    .then(()=>{
-        debug.def(`Connected to ${config.get('db.url')}/${config.get('db.database')}..`);
-    })
-    .catch((error)=>{
-        debug.db(`DB Connection Error to ${config.get('db.url')}/${config.get('db.database')}: `, error);
+    };
+
+    try {
+        await mongoose.connect(dbConnectionUrl,options);
+        debug.db(`Connected to ${db_url}/${db_database}!`);
+
+    } catch (error) {
+        debug.db(`DB Connection Error to ${db_url}/${db_database}: `, error);
         logger.error(error);
-    });
+        throw error;
+    }
+
 }
     
 export default {

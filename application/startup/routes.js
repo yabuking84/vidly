@@ -8,7 +8,7 @@ import auth from '../controller/auth.js';
 
 import error from '../middleware/error.js';
 
-console.log(global);
+// console.log((global);
 
 function init(app){
     app.use('/api/genres',genres);
@@ -20,7 +20,7 @@ function init(app){
     
     // test middleware with response
     app.use('/route-test',(request,response,next)=>{
-        console.log('/route-test middleware');
+        // console.log(('/route-test middleware');
         response.send('middleware with response!');
     });
     
@@ -28,9 +28,9 @@ function init(app){
     // not working, make it work later
     app.get('/shutdown/nodejs/gracefully',(request,response)=>{
         process.on('SIGTERM', () => {
-            console.log('Process terminating gracefully..');
+            // console.log(('Process terminating gracefully..');
             server.close(() => {
-              console.log('Process terminated gracefully!');
+              // console.log(('Process terminated gracefully!');
             });
         });   
     });
@@ -44,7 +44,7 @@ function init(app){
         mongoose.connection.db.command({
             shutdown : 1
         }, function(err, result) {
-            console.log('mongodb shutdown - ', err.message);
+            // console.log(('mongodb shutdown - ', err.message);
         });
         response.send('shutting down mongodb... ');
     });

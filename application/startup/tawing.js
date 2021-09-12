@@ -2,8 +2,8 @@ import config from 'config';
 
 import debug from '../modules/debug.js';
 import testMiddleware, {var1} from '../middleware/test.js';
-import auth0 from '../authentication/auth0.js';
-import auth0TestRoute from '../controller/auth0-test.js';
+// import auth0 from '../authentication/auth0.js';
+// import auth0TestRoute from '../controller/auth0-test.js';
    
 import ex_1 from '../experiments/ex_1.js';
 import ex_2 from '../experiments/ex_2.js';
@@ -25,20 +25,19 @@ function init(app) {
     const NODE_ENV = app.get('env');
 
     // Debuggers
-    debug.start("Starting...");
-    debug.def("NODE_ENV = ",NODE_ENV);
     debug.def(config.get('name'));
     debug.def(config.get('mail.password'));
     debug.def(config.get('jwt_key'));
+    debug.db('CHECK IF CAN DEBUG DB');
     debug.error("test error");
 
     // Auth0 test
     //////////////////////////////////////////////////////////
     // add Auth0 middleware to /auth0-test
-    app.use('/auth0-test',auth0.router);
+    // app.use('/auth0-test',auth0.router);
 
     // add routes to /auth0-test
-    app.use('/auth0-test',auth0TestRoute);
+    // app.use('/auth0-test',auth0TestRoute);
     //////////////////////////////////////////////////////////
     // Auth0 test
 
@@ -47,7 +46,7 @@ function init(app) {
     app.get('/exmain1',(request,response)=>{
 
         ex_2.action_ex2 = function(){
-            console.log('replaced in ex3.js');
+            // console.log(('replaced in ex3.js');
         };
         
         ex_1.action_ex1('from exmain1');
@@ -57,7 +56,7 @@ function init(app) {
     app.get('/exmain2',(request,response)=>{
 
         ex_2.action_ex2 = function(){
-            console.log('replaced asdsadasd');
+            // console.log(('replaced asdsadasd');
         };
         
         ex_1.action_ex1('from exmain2');
@@ -74,7 +73,7 @@ function init(app) {
 
         // this can actually break the app!! 
         // app.get = function(){
-        //     console.log("BREAK!");
+        //     // console.log(("BREAK!");
         // };
         response.send(true);
         

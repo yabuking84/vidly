@@ -1,18 +1,26 @@
 import request from 'supertest';
 import app from '../../app.js';
-import genreModel from '../../model/genre.js';
+import Genre from '../../model/genre.js';
 
 let server;
-const Genre = genreModel.Model;
-
 
 describe('/api/genres', ()=>{
+
+
     beforeEach( async ()=>{
         server = await app.start('test');
     });
     afterEach(async ()=>{
         await server.close();
         await Genre.remove({});
+    });
+
+    describe('GET /sample',()=>{
+        it('should return something', async ()=>{
+            const response = await request(server).get('/route-test');
+            expect(response.status).toBe(200);
+        });
+
     });
 
     describe('GET / ',()=>{

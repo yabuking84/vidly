@@ -15,11 +15,14 @@ import loggers from './startup/loggers.js';
 
 
 
-function start(mode='development'){
-
+async function start(mode='development'){
 
     // START APP
     const app = express();
+
+    // Debuggers
+    debug.start("Starting...");
+    debug.start("NODE_ENV = ",app.get('env'));
 
     // START LOGGERS
     loggers.init(app);
@@ -27,8 +30,8 @@ function start(mode='development'){
     // START MISC CHECKS
     checks.init();
 
-    // START MONGODB CONNECTION
-    database.init(mode);
+    // START MONGODB CONNECTION - needs to be finished, issues with jest
+    await database.init(mode);
 
     // START MIDDLEWARE
     middlewares.init(app);
@@ -37,15 +40,21 @@ function start(mode='development'){
     routes.init(app);
 
 
-
-
     // Some random experiments and tests
-    tawing.init(app);    
+    // tawing.init(app);    
 
-    const PORT = config.has('port')? config.get('port') : 3000;
-    return app.listen(PORT,(socket)=>{
+    let PORT = config.get('port');
+    
+    // when running integration tests
+    if(mode=='test') {
+        PORT = 9999;
+    }
+
+    const server = await app.listen(PORT,(socket)=>{
         debug.start(`listening to PORT: ${PORT}...`);
     });
+
+    return server;
 }
 
 export default {
