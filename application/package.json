@@ -12,7 +12,8 @@
     "dev": "nodemon index.js"
   },
   "jest": {
-    "transform": {}
+    "transform": {},
+    "testTimeout": 20000
   },
   "author": "",
   "license": "ISC",

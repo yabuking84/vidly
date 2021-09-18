@@ -5,7 +5,8 @@ import debug from './modules/debug.js';
 
 import routes from './startup/routes.js';
 import database from './startup/database.js';
-import middlewares from './startup/middlewares.js';
+import middlewaresStart from './startup/middleware-start.js';
+import middlewaresEnd from './startup/middleware-end.js';
 import tawing from './startup/tawing.js';
 import checks from './startup/checks.js';
 import loggers from './startup/loggers.js';
@@ -15,7 +16,7 @@ import loggers from './startup/loggers.js';
 
 
 
-async function start(mode='development'){
+ function start(mode='development'){
 
     // START APP
     const app = express();
@@ -31,14 +32,17 @@ async function start(mode='development'){
     checks.init();
 
     // START MONGODB CONNECTION - needs to be finished, issues with jest
-    await database.init(mode);
+    database.init(mode);
 
     // START MIDDLEWARE
-    middlewares.init(app);
-
+    middlewaresStart.init(app);
+    
     // START ROUTES
     routes.init(app);
+    
 
+    // START MIDDLEWARE END
+    middlewaresEnd.init(app);
 
     // Some random experiments and tests
     // tawing.init(app);    
@@ -50,9 +54,11 @@ async function start(mode='development'){
         PORT = 9999;
     }
 
-    const server = await app.listen(PORT,(socket)=>{
+    const server = app.listen(PORT,(socket)=>{
         debug.start(`listening to PORT: ${PORT}...`);
     });
+    server.keepAliveTimeout = 99999;
+    server.headersTimeout = 99999;
 
     return server;
 }

@@ -5,7 +5,7 @@ import logger from '../modules/logger.js';
 import config from 'config';
 
 
-async function init(mode='development') {
+function init(mode='development') {
 
     let db_protocol = `${config.get('db.protocol')}`;
     let db_username = `${config.get('db.username')}`;
@@ -38,7 +38,7 @@ async function init(mode='development') {
     };
 
     try {
-        await mongoose.connect(dbConnectionUrl,options);
+        mongoose.connect(dbConnectionUrl,options);
         debug.db(`Connected to ${db_url}/${db_database}!`);
 
     } catch (error) {

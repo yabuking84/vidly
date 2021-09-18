@@ -81,7 +81,36 @@ function init(app) {
     //////////////////////////////////////////////////////////
     // test on import is being cached
 
-
+    // test response
+    app.use('/route-test',(request,response,next)=>{
+        response.send('response!');
+    });
+    
+    // shutdown nodejs 
+    // not working, make it work later
+    app.get('/shutdown/nodejs/gracefully',(request,response)=>{
+        process.on('SIGTERM', () => {
+            // console.log(('Process terminating gracefully..');
+            server.close(() => {
+              // console.log(('Process terminated gracefully!');
+            });
+        });   
+    });
+    app.get('/shutdown/nodejs/immediately',(request,response)=>{
+        process.exit(); // or use SIGKILL 
+    });
+    
+    
+    // shutdown mongodb
+    app.get('/shutdown/mongodb/gracefully',(request,response)=>{
+        mongoose.connection.db.command({
+            shutdown : 1
+        }, function(err, result) {
+            // console.log(('mongodb shutdown - ', err.message);
+        });
+        response.send('shutting down mongodb... ');
+    });
+    
     // jest experiment
     ///////////////////////////////////////////////////////////
     // app.get('/jest',(request,response)=>{
